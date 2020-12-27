@@ -22,10 +22,59 @@ enum i2c_status_t {
 class I2C_Interface
 {
 public:
-  virtual i2c_status_t Init_I2C(uint32_t baudrate) = 0;
-  virtual void SetBaudRate(uint32_t baudrate) = 0;
-  virtual uint8_t ReadRegister(uint8_t slaveAddress, uint8_t regAddress, i2c_status_t* status) = 0;
+  /**
+  * @brief  I2C peripheral initialization method.
+  * @param  baudrate I2C clock frequency (default 100 kHz)
+  * @retval i2c_status_t
+  */
+  virtual i2c_status_t Init_I2C(uint32_t baudrate = 100000) = 0;
+
+  /**
+  * @brief  Setter for I2C peripheral clock frequency.
+  * @param  baudrate I2C clock frequency
+  * @retval i2c_status_t
+  */
+  virtual i2c_status_t SetBaudRate(uint32_t baudrate) = 0;
+
+  /**
+  * @brief  This method will be used for reading the data of the given register from
+  * the slave with given address.
+  * @param  slaveAddress Slave chip I2C bus address
+  * @param  regAddress Register address to be read
+  * @param  status Pointer for operation status
+  * @retval uint8_t Read register value
+  */
+  virtual uint8_t ReadRegister(uint8_t slaveAddress, uint8_t regAddress, i2c_status_t *status) = 0;
+
+  /**
+  * @brief  This method will be used for writing gven data to the given register of the slave device 
+  * with the given address.
+  * @param  slaveAddress Slave chip I2C bus address
+  * @param  regAddress Register address that the data to be written
+  * @param  data Data to be written
+  * @retval i2c_status_t
+  */
   virtual i2c_status_t WriteRegister(uint8_t slaveAddress, uint8_t regAddress, uint8_t data) = 0;
-  virtual bool ReadRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, i2c_status_t* status) = 0;
+
+  /**
+  * @brief  This method will be used for reading a bit value of the given register
+  * from the slace device with the given address.
+  * @param  slaveAddress Slave chip I2C bus address
+  * @param  regAddress Register address that the data to be read
+  * @param  bitNo Bit number to be read
+  * @param  status Pointer for operation status
+  * @retval bool Bit value
+  */
+  virtual bool ReadRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, i2c_status_t *status) = 0;
+
+  /**
+  * @brief  This method will be used for writing a bit value of the given register
+  * from the slace device with the given address.
+  * @param  slaveAddress Slave chip I2C bus address
+  * @param  regAddress Register address that the data to be written
+  * @param  bitNo Bit number to be set/reset
+  * @param  bitVal Bit value to be written
+  * @retval i2c_status_t
+  */
   virtual i2c_status_t WriteRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, bool bitVal) = 0;
 };
