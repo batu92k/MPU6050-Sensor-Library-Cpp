@@ -33,13 +33,6 @@ public:
   virtual i2c_status_t Init_I2C(uint32_t baudrate = 100000) = 0;
 
   /**
-  * @brief  Setter for I2C peripheral clock frequency.
-  * @param  baudrate I2C clock frequency
-  * @retval i2c_status_t
-  */
-  virtual i2c_status_t SetBaudRate(uint32_t baudrate) = 0;
-
-  /**
   * @brief  This method will be used for reading the data of the given register from
   * the slave with given address.
   * @param  slaveAddress Slave chip I2C bus address
