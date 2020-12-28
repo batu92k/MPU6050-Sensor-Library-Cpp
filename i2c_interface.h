@@ -68,7 +68,7 @@ public:
   * @param  status Pointer for operation status
   * @retval bool Bit value
   */
-  virtual bool ReadRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, i2c_status_t *status) = 0;
+  bool ReadRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, i2c_status_t *status);
 
   /**
   * @brief  This method will be used for writing a bit value of the given register
@@ -79,7 +79,7 @@ public:
   * @param  bitVal Bit value to be written
   * @retval i2c_status_t
   */
-  virtual i2c_status_t WriteRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, bool bitVal) = 0;
+  i2c_status_t WriteRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, bool bitVal);
 };
 
 #endif /* include guard */
