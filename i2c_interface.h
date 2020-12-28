@@ -8,6 +8,9 @@
   */
 #include <stdint.h>
 
+#ifndef I2C_INTERFACE_H
+#define I2C_INTERFACE_H
+
 /* I2C status types. 
  * TODO: will be extended for different I2C error types! */
 enum i2c_status_t {
@@ -78,3 +81,5 @@ public:
   */
   virtual i2c_status_t WriteRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, bool bitVal) = 0;
 };
+
+#endif /* include guard */
