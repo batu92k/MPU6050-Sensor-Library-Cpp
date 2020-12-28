@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    mpu6050.h
+  * @file    i2c_interface.cpp
   * @author  Ali Batuhan KINDAN
-  * @date    20.12.2020
-  * @brief   This file constains MPU6050 driver declarations.
+  * @date    28.12.2020
+  * @brief   This file constains I2C Interface class implementation.
   ******************************************************************************
   */
-
+#include "i2c_interface.h"

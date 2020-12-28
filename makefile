@@ -1,7 +1,7 @@
 # Project Makefile 20201219 - Ali Batuhan KINDAN
 all: main
 
-main: create_build_folder example.o mpu6050.o
+main: create_build_folder example.o i2c_interface.o mpu6050.o
 	$(info -> Creating executable)
 	@g++ -o build/example build/example.o
 
@@ -12,6 +12,10 @@ create_build_folder:
 example.o: example.cpp
 	$(info -> Compiling example.cpp)
 	@g++ -c -Wall example.cpp -o build/example.o
+
+i2c_interface.o: i2c_interface.cpp
+	$(info -> Compiling i2c_interface.cpp)
+	@g++ -c -Wall i2c_interface.cpp -o build/i2c_interface.o
 
 mpu6050.o: mpu6050.cpp
 	$(info -> Compiling mpu6050.cpp)
