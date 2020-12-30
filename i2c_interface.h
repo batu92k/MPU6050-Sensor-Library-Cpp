@@ -13,7 +13,8 @@
 
 /* I2C status types. 
  * TODO: will be extended for different I2C error types! */
-enum i2c_status_t {
+enum i2c_status_t 
+{
   I2C_STATUS_SUCCESS = 0x00,
   I2C_STATUS_ERROR = 0x01,
   I2C_STATUS_NONE = 0x02
