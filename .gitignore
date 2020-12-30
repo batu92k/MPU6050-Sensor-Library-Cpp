@@ -8,7 +8,7 @@
 /Debug/
 /Docs/
 /Release/
-/build/
+*/build/
 /bin/
 /out/
 /cmake-build-*/
