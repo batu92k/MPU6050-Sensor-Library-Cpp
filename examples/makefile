@@ -1,7 +1,7 @@
 # Project Makefile 20201219 - Ali Batuhan KINDAN
 all: main
 
-main: create_build_folder example_rpi4.o i2c_interface.o mpu6050.o
+main: create_build_folder i2c_interface.o mpu6050.o example_rpi4.o
 	$(info -> Creating executable)
 	@g++ -o build/example_rpi4 build/example_rpi4.o
 
