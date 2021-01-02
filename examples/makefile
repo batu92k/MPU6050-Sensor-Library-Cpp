@@ -1,7 +1,7 @@
 # Project Makefile 20201219 - Ali Batuhan KINDAN
 all: main
 
-main: create_build_folder i2c_interface.o mpu6050.o example_rpi4.o
+main: create_build_folder i2c_interface.o mpu6050.o bcm2835_i2c_if.o example_rpi4.o
 	$(info -> Creating executable)
 	@g++ -o build/example_rpi4 build/example_rpi4.o
 
@@ -12,6 +12,10 @@ create_build_folder:
 example_rpi4.o: example_rpi4.cpp
 	$(info -> Compiling example.cpp)
 	@g++ -c -Wall example_rpi4.cpp -o build/example_rpi4.o
+
+bcm2835_i2c_if.o: bcm2835_i2c_if.cpp
+	$(info -> Compiling bcm2835_i2c_if.cpp)
+	@g++ -c -Wall bcm2835_i2c_if.cpp -o build/bcm2835_i2c_if.o
 
 i2c_interface.o: ../i2c_interface.cpp
 	$(info -> Compiling i2c_interface.cpp)
