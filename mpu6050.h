@@ -12,9 +12,18 @@
 
 #include "i2c_interface.h"
 
+#define AD0 1
+
 /* MPU6050 I2C Device Address */
 #define MPU6050_ADDRESS_AD0 0x68 // AD0 pin low
 #define MPU6050_ADDRESS_AD1 0x69 // AD0 pin high
+
+/* Define default MPU6050 address as 0x68 (AD0 pin low) */
+#if AD0
+#define MPU6050_ADDRESS MPU6050_ADDRESS_AD0
+#else
+#define MPU6050_ADDRESS MPU6050_ADDRESS_AD1
+#endif
 
 #define REG_PWR_MGMT_1 0x6B
 
