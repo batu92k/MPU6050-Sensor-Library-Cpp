@@ -16,10 +16,19 @@
   */
 i2c_status_t BCM2835_I2C_IF::Init_I2C(uint32_t baudrate)
 {
+    /* Initalize library. We have to call this before we call any
+     * bcm2835 driver method, otherwise we will get memory related
+     * errors! (Segmentation Fault) */
+    if(!bcm2835_init()) 
+    {
+        return I2C_STATUS_ERROR;
+    }
+
     if(!bcm2835_i2c_begin())
     {
         return I2C_STATUS_ERROR;
     }
+    
     bcm2835_i2c_set_baudrate(baudrate);
     bcm2835_gpio_set_pud(RPI_GPIO_P1_03, BCM2835_GPIO_PUD_UP);
     bcm2835_gpio_set_pud(RPI_GPIO_P1_05, BCM2835_GPIO_PUD_UP);
