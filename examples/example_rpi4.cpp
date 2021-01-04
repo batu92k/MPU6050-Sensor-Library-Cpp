@@ -28,6 +28,13 @@ int main()
     return EXIT_FAILURE;
   }
 
+  /* configure gyroscope full scale range as 500 degree per second */
+  if(sensor.SetGyroFullScale(GYRO_SCALE_500) != I2C_STATUS_SUCCESS)
+  {
+    std::cout << "Gyroscope configuration failed!\n";
+    return EXIT_FAILURE;
+  }
+
   std::cout << "Sensor awake!\n";
   return EXIT_SUCCESS;
 }
