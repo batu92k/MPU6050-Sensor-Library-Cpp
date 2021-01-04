@@ -35,3 +35,14 @@ MPU6050::MPU6050(I2C_Interface *comInterface)
   {
     return i2c->WriteRegisterBit(MPU6050_ADDRESS, REG_PWR_MGMT_1, BIT_SLEEP, false);
   }
+
+  /**
+  * @brief  This method used for configuring the gyroscope full scale range.
+  * Check gyro_full_scale_range_t for available scales.
+  * @param  gyroScale Gyroscope scale value to be set
+  * @retval i2c_status_t
+  */
+  i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
+  {
+    return i2c->WriteRegister(MPU6050_ADDRESS, REG_GYRO_CONFIG, ((uint8_t)gyroScale << 3));
+  }

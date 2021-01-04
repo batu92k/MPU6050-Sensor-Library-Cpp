@@ -26,6 +26,7 @@
 #endif
 
 #define REG_PWR_MGMT_1 0x6B
+#define REG_GYRO_CONFIG 0x1B
 
 enum pwr_mgmt_1_bits_t 
 {
@@ -36,6 +37,23 @@ enum pwr_mgmt_1_bits_t
   BIT_CYCLE = 5,
   BIT_SLEEP = 6,
   BIT_DEVICE_RESET = 7
+};
+
+enum gyro_config_bits_t
+{
+  XG_ST = 7,
+  YG_ST = 6,
+  ZG_ST = 5
+  /* other bits related with gyro full scale config! */
+};
+
+/* Gyroscope full scale ranges in degrees per second */
+enum gyro_full_scale_range_t
+{
+  GYRO_SCALE_250 = 0,
+  GYRO_SCALE_500 = 1,
+  GYRO_SCALE_1000 = 2,
+  GYRO_SCALE_2000 = 3
 };
 
 class MPU6050 
@@ -58,6 +76,14 @@ public:
   * @retval i2c_status_t
   */
   i2c_status_t WakeUpSensor(void);
+
+  /**
+  * @brief  This method used for configuring the gyroscope full scale range.
+  * Check gyro_full_scale_range_t for available scales.
+  * @param  gyroScale Gyroscope scale value to be set
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetGyroFullScale(gyro_full_scale_range_t gyroScale);
 
 private:
   I2C_Interface* i2c = nullptr;
