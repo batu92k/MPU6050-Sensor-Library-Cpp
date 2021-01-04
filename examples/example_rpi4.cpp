@@ -17,6 +17,7 @@ int main()
   if(i2c_if->Init_I2C(400000) != I2C_STATUS_SUCCESS)
   {
     std::cout << "I2C initialization failed!\n";
+    delete i2c_if;
     return EXIT_FAILURE;
   }
   MPU6050 sensor(i2c_if);
