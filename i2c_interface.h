@@ -27,6 +27,20 @@ class I2C_Interface
 {
 public:
   /**
+  * @brief  Class constructor.
+  * @param  none
+  * @retval none
+  */
+  I2C_Interface() {/* empty constructor */};
+
+  /**
+  * @brief  Class destructor
+  * @param  none
+  * @retval none
+  */
+  virtual ~I2C_Interface() {/* empty virtual destructor */};
+
+  /**
   * @brief  I2C peripheral initialization method.
   * @param  baudrate I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
