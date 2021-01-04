@@ -13,7 +13,7 @@
 #define BCM2835_I2C_IF_H
 
 /* I2C interface for BCM2835 library. */
-class BCM2835_I2C_IF : I2C_Interface
+class BCM2835_I2C_IF : public I2C_Interface
 {
 public:
   /**
@@ -21,7 +21,7 @@ public:
   * @param  baudrate I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  i2c_status_t Init_I2C(uint32_t baudrate);
+  i2c_status_t Init_I2C(uint32_t baudrate = 100000);
 
   /**
   * @brief  This method will be used for reading the data of the given register from

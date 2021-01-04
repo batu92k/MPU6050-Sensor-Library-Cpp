@@ -14,7 +14,7 @@
   * @param  baudrate I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-i2c_status_t BCM2835_I2C_IF::Init_I2C(uint32_t baudrate = 100000)
+i2c_status_t BCM2835_I2C_IF::Init_I2C(uint32_t baudrate)
 {
     if(!bcm2835_i2c_begin())
     {
