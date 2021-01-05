@@ -27,6 +27,7 @@
 
 #define REG_PWR_MGMT_1 0x6B
 #define REG_GYRO_CONFIG 0x1B
+#define REG_ACCEL_CONFIG 0x1C
 
 enum regbits_pwr_mgmt_1_t 
 {
@@ -47,6 +48,14 @@ enum regbits_gyro_config_t
   /* other bits related with gyro full scale config! */
 };
 
+enum regbits_accel_config_t
+{
+  XA_ST = 7,
+  YA_ST = 6,
+  ZA_ST = 5
+  /* other bits related with accelerometer full scale config! */
+};
+
 /* Gyroscope full scale ranges in degrees per second */
 enum gyro_full_scale_range_t
 {
@@ -54,6 +63,15 @@ enum gyro_full_scale_range_t
   GYRO_SCALE_500 = 1,
   GYRO_SCALE_1000 = 2,
   GYRO_SCALE_2000 = 3
+};
+
+/* Accelerometer full scale ranges in G's */
+enum accel_full_scale_range_t
+{
+  ACCEL_SCALE_2G = 0,
+  ACCEL_SCALE_4G = 1,
+  ACCEL_SCALE_8G = 2,
+  ACCEL_SCALE_16G = 3
 };
 
 class MPU6050 
@@ -84,6 +102,14 @@ public:
   * @retval i2c_status_t
   */
   i2c_status_t SetGyroFullScale(gyro_full_scale_range_t gyroScale);
+
+  /**
+  * @brief  This method used for configuring the accelerometer full scale range.
+  * Check accel_full_scale_range_t for available scales.
+  * @param  accelScale Accelerometer scale value to be set
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetAccelFullScale(accel_full_scale_range_t accelScale);
 
 private:
   I2C_Interface* i2c = nullptr;

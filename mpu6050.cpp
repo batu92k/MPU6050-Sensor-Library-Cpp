@@ -46,3 +46,14 @@ MPU6050::MPU6050(I2C_Interface *comInterface)
   {
     return i2c->WriteRegister(MPU6050_ADDRESS, REG_GYRO_CONFIG, ((uint8_t)gyroScale << 3));
   }
+
+  /**
+  * @brief  This method used for configuring the accelerometer full scale range.
+  * Check accel_full_scale_range_t for available scales.
+  * @param  accelScale Accelerometer scale value to be set
+  * @retval i2c_status_t
+  */
+  i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
+  {
+    return i2c->WriteRegister(MPU6050_ADDRESS, REG_ACCEL_CONFIG, ((uint8_t)accelScale << 3));
+  }
