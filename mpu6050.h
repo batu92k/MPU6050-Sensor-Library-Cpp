@@ -28,7 +28,7 @@
 #define REG_PWR_MGMT_1 0x6B
 #define REG_GYRO_CONFIG 0x1B
 
-enum pwr_mgmt_1_bits_t 
+enum regbits_pwr_mgmt_1_t 
 {
   BIT_CLKSEL_0 = 0,
   BIT_CLKSEL_1 = 1,
@@ -39,7 +39,7 @@ enum pwr_mgmt_1_bits_t
   BIT_DEVICE_RESET = 7
 };
 
-enum gyro_config_bits_t
+enum regbits_gyro_config_t
 {
   XG_ST = 7,
   YG_ST = 6,
