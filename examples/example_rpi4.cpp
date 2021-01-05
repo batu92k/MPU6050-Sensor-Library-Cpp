@@ -20,6 +20,7 @@ int main()
     delete i2c_if;
     return EXIT_FAILURE;
   }
+
   MPU6050 sensor(i2c_if);
   /* wakeup sensor from sleep mode */
   if(sensor.WakeUpSensor() != I2C_STATUS_SUCCESS)
@@ -35,6 +36,13 @@ int main()
     return EXIT_FAILURE;
   }
 
-  std::cout << "Sensor awake!\n";
+  /* configure accelerometer full scale range as +-8G */
+  if(sensor.SetAccelFullScale(ACCEL_SCALE_8G) != I2C_STATUS_SUCCESS)
+  {
+    std::cout << "Accelerometer configuration failed!\n";
+    return EXIT_FAILURE;
+  }
+
+  std::cout << "Success!\n";
   return EXIT_SUCCESS;
 }
