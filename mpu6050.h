@@ -154,9 +154,9 @@ public:
   * @brief  This method used for getting the latest temperature value from the sensor.
   * scale range is set to desired range, before reading the values.
   * @param  error Error state of process
-  * @retval int16_t Temperature in celcius-degrees
+  * @retval float Temperature in celcius-degrees
   */
-  int16_t GetTemperature(i2c_status_t* error);
+  float GetTemperature(i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;
