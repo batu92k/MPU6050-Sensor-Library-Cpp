@@ -6,9 +6,12 @@
   * @brief   Example application for Rpi4 to show MPU6050 driver features.
   ******************************************************************************
   */
+#include <thread> // std::this_thread::sleep_for
+#include <chrono> // std::chrono::milliseconds
 #include <iostream>
 #include "../mpu6050.h"
 #include "bcm2835_i2c_if.h"
+
 
 int main() 
 {
@@ -43,6 +46,17 @@ int main()
     return EXIT_FAILURE;
   }
 
-  std::cout << "Success!\n";
+  std::cout << "Sensor configuration completed!\n";
+
+  /* Read accelerometer for test! */
+  i2c_status_t error[3] = {I2C_STATUS_SUCCESS, I2C_STATUS_SUCCESS, I2C_STATUS_SUCCESS};
+  while((error[0] | error[1] | error[2]) == I2C_STATUS_SUCCESS)
+  {
+    std::cout << "Acc_X: " << sensor.GetAccel_X(&error[0]) << " ";
+    std::cout << "Acc_Y: " << sensor.GetAccel_Y(&error[1]) << " ";
+    std::cout << "Acc_Z: " << sensor.GetAccel_Z(&error[2]) << "\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+
   return EXIT_SUCCESS;
 }
