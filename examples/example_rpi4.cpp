@@ -48,13 +48,18 @@ int main()
 
   std::cout << "Sensor configuration completed!\n";
 
-  /* Read accelerometer for test! */
-  i2c_status_t error[3] = {I2C_STATUS_SUCCESS, I2C_STATUS_SUCCESS, I2C_STATUS_SUCCESS};
-  while((error[0] | error[1] | error[2]) == I2C_STATUS_SUCCESS)
+  /* Read sensor conversion registers for test! */
+  uint8_t totalRes = I2C_STATUS_SUCCESS;
+  i2c_status_t currentRes = I2C_STATUS_SUCCESS;
+  while(totalRes == I2C_STATUS_SUCCESS)
   {
-    std::cout << "Acc_X: " << sensor.GetAccel_X(&error[0]) << " ";
-    std::cout << "Acc_Y: " << sensor.GetAccel_Y(&error[1]) << " ";
-    std::cout << "Acc_Z: " << sensor.GetAccel_Z(&error[2]) << "\n";
+    std::cout << "Acc_X: " << sensor.GetAccel_X(&currentRes) << " ";
+    totalRes |= currentRes;
+    std::cout << "Acc_Y: " << sensor.GetAccel_Y(&currentRes) << " ";
+    totalRes |= currentRes;
+    std::cout << "Acc_Z: " << sensor.GetAccel_Z(&currentRes) << " ";
+    totalRes |= currentRes;
+    std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << "\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
