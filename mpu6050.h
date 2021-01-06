@@ -28,6 +28,12 @@
 #define REG_PWR_MGMT_1 0x6B
 #define REG_GYRO_CONFIG 0x1B
 #define REG_ACCEL_CONFIG 0x1C
+#define REG_ACCEL_X_OUT_H 0x3B
+#define REG_ACCEL_X_OUT_L 0x3C
+#define REG_ACCEL_Y_OUT_H 0x3D
+#define REG_ACCEL_Y_OUT_L 0x3E
+#define REG_ACCEL_Z_OUT_H 0x3F
+#define REG_ACCEL_Z_OUT_L 0x40
 
 enum regbits_pwr_mgmt_1_t 
 {
@@ -110,6 +116,33 @@ public:
   * @retval i2c_status_t
   */
   i2c_status_t SetAccelFullScale(accel_full_scale_range_t accelScale);
+
+  /**
+  * @brief  This method used for getting the latest accelerometer X axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
+  * scale range is set to desired range, before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t X axis acceleration value
+  */
+  int16_t GetAccel_X(i2c_status_t* error);
+
+  /**
+  * @brief  This method used for getting the latest accelerometer Y axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
+  * scale range is set to desired range, before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Y axis acceleration value
+  */
+  int16_t GetAccel_Y(i2c_status_t* error); 
+
+  /**
+  * @brief  This method used for getting the latest accelerometer Z axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
+  * scale range is set to desired range, before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Z axis acceleration value
+  */
+  int16_t GetAccel_Z(i2c_status_t* error); 
 
 private:
   I2C_Interface* i2c = nullptr;
