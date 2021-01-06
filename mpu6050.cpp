@@ -114,3 +114,21 @@ int16_t MPU6050::GetAccel_Z(i2c_status_t *error)
 
   return 0x00;
 }
+
+/**
+  * @brief  This method used for getting the latest temperature value from the sensor.
+  * scale range is set to desired range, before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Temperature in celcius-degrees
+  */
+int16_t MPU6050::GetTemperature(i2c_status_t *error)
+{
+  int16_t sensorTemp = i2c->ReadRegister(MPU6050_ADDRESS, REG_TEMP_OUT_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    sensorTemp = (sensorTemp << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_TEMP_OUT_L, error); // assemble higher and lower bytes
+    return sensorTemp;
+  }
+
+  return 0x00;
+}

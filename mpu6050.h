@@ -28,12 +28,18 @@
 #define REG_PWR_MGMT_1 0x6B
 #define REG_GYRO_CONFIG 0x1B
 #define REG_ACCEL_CONFIG 0x1C
+
+/* Accelerometer read registers */
 #define REG_ACCEL_X_OUT_H 0x3B
 #define REG_ACCEL_X_OUT_L 0x3C
 #define REG_ACCEL_Y_OUT_H 0x3D
 #define REG_ACCEL_Y_OUT_L 0x3E
 #define REG_ACCEL_Z_OUT_H 0x3F
 #define REG_ACCEL_Z_OUT_L 0x40
+
+/* Temperature read registers */
+#define REG_TEMP_OUT_H 0x41
+#define REG_TEMP_OUT_L 0x42
 
 enum regbits_pwr_mgmt_1_t 
 {
@@ -133,7 +139,7 @@ public:
   * @param  error Error state of process
   * @retval int16_t Y axis acceleration value
   */
-  int16_t GetAccel_Y(i2c_status_t* error); 
+  int16_t GetAccel_Y(i2c_status_t* error);
 
   /**
   * @brief  This method used for getting the latest accelerometer Z axis value from
@@ -142,7 +148,15 @@ public:
   * @param  error Error state of process
   * @retval int16_t Z axis acceleration value
   */
-  int16_t GetAccel_Z(i2c_status_t* error); 
+  int16_t GetAccel_Z(i2c_status_t* error);
+
+  /**
+  * @brief  This method used for getting the latest temperature value from the sensor.
+  * scale range is set to desired range, before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Temperature in celcius-degrees
+  */
+  int16_t GetTemperature(i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;
