@@ -41,6 +41,14 @@
 #define REG_TEMP_OUT_H 0x41
 #define REG_TEMP_OUT_L 0x42
 
+/* Gyroscope read registers */
+#define REG_GYRO_X_OUT_H 0x43
+#define REG_GYRO_X_OUT_L 0x44
+#define REG_GYRO_Y_OUT_H 0x45
+#define REG_GYRO_Y_OUT_L 0x46
+#define REG_GYRO_Z_OUT_H 0x47
+#define REG_GYRO_Z_OUT_L 0x48
+
 enum regbits_pwr_mgmt_1_t 
 {
   BIT_CLKSEL_0 = 0,
@@ -114,6 +122,33 @@ public:
   * @retval i2c_status_t
   */
   i2c_status_t SetGyroFullScale(gyro_full_scale_range_t gyroScale);
+
+  /**
+  * @brief  This method used for getting the latest gyroscope X axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
+  * scale range is set to desired range before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t X axis gyroscope value
+  */
+  int16_t GetGyro_X(i2c_status_t* error);
+
+  /**
+  * @brief  This method used for getting the latest gyroscope Y axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
+  * scale range is set to desired range before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Y axis gyroscope value
+  */
+  int16_t GetGyro_Y(i2c_status_t* error);
+
+  /**
+  * @brief  This method used for getting the latest gyroscope Z axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
+  * scale range is set to desired range before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Z axis gyroscope value
+  */
+  int16_t GetGyro_Z(i2c_status_t* error);
 
   /**
   * @brief  This method used for configuring the accelerometer full scale range.

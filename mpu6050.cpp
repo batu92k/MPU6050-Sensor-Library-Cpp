@@ -48,6 +48,63 @@ i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
 }
 
 /**
+  * @brief  This method used for getting the latest gyroscope X axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
+  * scale range is set to desired range before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t X axis gyroscope value
+  */
+int16_t MPU6050::GetGyro_X(i2c_status_t *error)
+{
+  int16_t gyroXVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_X_OUT_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    gyroXVal = (gyroXVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_X_OUT_L, error); // assemble higher and lower bytes
+    return gyroXVal;
+  }
+
+  return 0x00; 
+}
+
+/**
+  * @brief  This method used for getting the latest gyroscope Y axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
+  * scale range is set to desired range before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Y axis gyroscope value
+  */
+int16_t MPU6050::GetGyro_Y(i2c_status_t *error)
+{
+  int16_t gyroYVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Y_OUT_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    gyroYVal = (gyroYVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Y_OUT_L, error); // assemble higher and lower bytes
+    return gyroYVal;
+  }
+
+  return 0x00;  
+}
+
+/**
+  * @brief  This method used for getting the latest gyroscope Z axis value from
+  * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
+  * scale range is set to desired range before reading the values.
+  * @param  error Error state of process
+  * @retval int16_t Z axis gyroscope value
+  */
+int16_t MPU6050::GetGyro_Z(i2c_status_t *error)
+{
+  int16_t gyroZVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Z_OUT_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    gyroZVal = (gyroZVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Z_OUT_L, error); // assemble higher and lower bytes
+    return gyroZVal;
+  }
+
+  return 0x00;
+}
+
+/**
   * @brief  This method used for configuring the accelerometer full scale range.
   * Check accel_full_scale_range_t for available scales.
   * @param  accelScale Accelerometer scale value to be set
