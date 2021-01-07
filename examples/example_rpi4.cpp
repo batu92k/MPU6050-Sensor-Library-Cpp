@@ -60,6 +60,7 @@ int main()
     std::cout << "Acc_Z: " << sensor.GetAccel_Z(&currentRes) << " ";
     totalRes |= currentRes;
     std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << "\n";
+    totalRes |= currentRes;
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
