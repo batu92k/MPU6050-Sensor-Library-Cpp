@@ -59,10 +59,18 @@ int main()
     totalRes |= currentRes;
     std::cout << "Acc_Z: " << sensor.GetAccel_Z(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << "\n";
+    std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << " ";
+    totalRes |= currentRes;
+    std::cout << "Gyro_X: " << sensor.GetGyro_X(&currentRes) << " ";
+    totalRes |= currentRes;
+    std::cout << "Gyro_Y: " << sensor.GetGyro_Y(&currentRes) << " ";
+    totalRes |= currentRes;
+    std::cout << "Gyro_Z: " << sensor.GetGyro_Z(&currentRes) << "\n";
     totalRes |= currentRes;
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
-  return EXIT_SUCCESS;
+  std::cout << "Sensor read error program terminated!\n";
+
+  return EXIT_FAILURE;
 }
