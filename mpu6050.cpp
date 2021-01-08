@@ -48,13 +48,13 @@ i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
 }
 
 /**
-  * @brief  This method used for getting the latest gyroscope X axis value from
+  * @brief  This method used for getting the latest gyroscope X axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
   * scale range is set to desired range before reading the values.
   * @param  error Error state of process
-  * @retval int16_t X axis gyroscope value
+  * @retval int16_t X axis RAW gyroscope value
   */
-int16_t MPU6050::GetGyro_X(i2c_status_t *error)
+int16_t MPU6050::GetGyro_X_Raw(i2c_status_t *error)
 {
   int16_t gyroXVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_X_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
@@ -67,13 +67,13 @@ int16_t MPU6050::GetGyro_X(i2c_status_t *error)
 }
 
 /**
-  * @brief  This method used for getting the latest gyroscope Y axis value from
+  * @brief  This method used for getting the latest gyroscope Y axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
   * scale range is set to desired range before reading the values.
   * @param  error Error state of process
-  * @retval int16_t Y axis gyroscope value
+  * @retval int16_t Y axis RAW gyroscope value
   */
-int16_t MPU6050::GetGyro_Y(i2c_status_t *error)
+int16_t MPU6050::GetGyro_Y_Raw(i2c_status_t *error)
 {
   int16_t gyroYVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Y_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
@@ -86,13 +86,13 @@ int16_t MPU6050::GetGyro_Y(i2c_status_t *error)
 }
 
 /**
-  * @brief  This method used for getting the latest gyroscope Z axis value from
+  * @brief  This method used for getting the latest gyroscope Z axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
   * scale range is set to desired range before reading the values.
   * @param  error Error state of process
-  * @retval int16_t Z axis gyroscope value
+  * @retval int16_t Z axis RAW gyroscope value
   */
-int16_t MPU6050::GetGyro_Z(i2c_status_t *error)
+int16_t MPU6050::GetGyro_Z_Raw(i2c_status_t *error)
 {
   int16_t gyroZVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Z_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)

@@ -61,11 +61,11 @@ int main()
     totalRes |= currentRes;
     std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Gyro_X: " << sensor.GetGyro_X(&currentRes) << " ";
+    std::cout << "Gyro_X: " << sensor.GetGyro_X_Raw(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Gyro_Y: " << sensor.GetGyro_Y(&currentRes) << " ";
+    std::cout << "Gyro_Y: " << sensor.GetGyro_Y_Raw(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Gyro_Z: " << sensor.GetGyro_Z(&currentRes) << "\n";
+    std::cout << "Gyro_Z: " << sensor.GetGyro_Z_Raw(&currentRes) << "\n";
     totalRes |= currentRes;
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
