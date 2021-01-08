@@ -107,6 +107,18 @@ public:
   MPU6050(I2C_Interface* comInterface);
 
   /**
+  * @brief  This method wakes up the sensor and configures the accelerometer and
+  * gyroscope full scale renges with given parameters. It returns the result of
+  * the process.
+  * @param  gyroScale Gyroscope scale value to be set
+  * @param  accelScale Accelerometer scale value to be set
+  * @retval i2c_status_t Success rate
+  */
+  i2c_status_t InitializeSensor(
+      gyro_full_scale_range_t gyroScale = GYRO_SCALE_250,
+      accel_full_scale_range_t accelScale = ACCEL_SCALE_2G);
+
+  /**
   * @brief  This method wakes the sensor up by cleraing the REG_PWR_MGMT_1
   * BIT_SLEEP. Power management 1 sensors default values is 0x40 so it will
   * be in sleep mode when it's powered up.
