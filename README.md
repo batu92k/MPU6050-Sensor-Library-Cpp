@@ -2,7 +2,7 @@
 
 ## **About the Library**
 
-This library is made to create a simple interface in C++ for the MPU6050 sensor over I2C. The library initially made for Raspberry Pi 4 but it allows users to port the library to other architectures easily. Additionally, the library currently includes an example application the is made for RaspberryPi 4.
+This library is made to create a simple interface in C++ for the MPU6050 sensor over I2C. The library initially made for Raspberry Pi 4 but it allows users to port the library to other architectures easily. Additionally, the library currently includes an example application made for RaspberryPi 4.
 
 ## **How to Use**
 Since the I2C related methods (such as initialization, read, write, etc.) may differ for every architecture, the library is using an interface class called ```I2C_Interface``` (see i2c_interface.h source file) in order to keep the library flexible to port to other architectures. The user should create its own class from the I2C_Interface base class and implement only 3 methods to make it work for its architecture. Methods to be implemented by the user are the following:
@@ -31,7 +31,7 @@ Check this link for RaspberryPi pinout: https://www.raspberrypi.org/documentatio
 
 ### **3) Build and Run**
 
-In order to build the example application, make sure that the requirements are fullfilled (check requirements above) and move into the examples folder by using terminal then type ```make all```. If everything is ok, it will create the executable inside the ```examples/build``` folder.
+In order to build the example application, make sure that the requirements are fulfilled (check requirements above) and move into the examples folder by using terminal then type ```make all```. If everything is ok, it will create the executable inside the ```examples/build``` folder.
 
 After the build process you can run the application by moving into ```examples/build``` folder with terminal and type ```sudo ./example_rpi4```.
 
