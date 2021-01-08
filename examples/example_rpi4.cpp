@@ -25,24 +25,11 @@ int main()
   }
 
   MPU6050 sensor(i2c_if);
-  /* wakeup sensor from sleep mode */
-  if(sensor.WakeUpSensor() != I2C_STATUS_SUCCESS)
+  
+  /* Wakeup sensor and set full scale ranges */
+  if(sensor.InitializeSensor(GYRO_SCALE_500, ACCEL_SCALE_8G) != I2C_STATUS_SUCCESS)
   {
-    std::cout << "Sensor wakeup failed!\n";
-    return EXIT_FAILURE;
-  }
-
-  /* configure gyroscope full scale range as 500 degree per second */
-  if(sensor.SetGyroFullScale(GYRO_SCALE_500) != I2C_STATUS_SUCCESS)
-  {
-    std::cout << "Gyroscope configuration failed!\n";
-    return EXIT_FAILURE;
-  }
-
-  /* configure accelerometer full scale range as +-8G */
-  if(sensor.SetAccelFullScale(ACCEL_SCALE_8G) != I2C_STATUS_SUCCESS)
-  {
-    std::cout << "Accelerometer configuration failed!\n";
+    std::cout << "Sensor initialization failed!\n";
     return EXIT_FAILURE;
   }
 
