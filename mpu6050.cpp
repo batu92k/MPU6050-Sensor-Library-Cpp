@@ -178,7 +178,7 @@ int16_t MPU6050::GetAccel_Z_Raw(i2c_status_t *error)
   * @param  error Error state of process
   * @retval float Temperature in celcius-degrees
   */
-float MPU6050::GetTemperature(i2c_status_t *error)
+float MPU6050::GetTemperature_Celcius(i2c_status_t *error)
 {
   int16_t sensorTemp = i2c->ReadRegister(MPU6050_ADDRESS, REG_TEMP_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)

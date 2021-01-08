@@ -59,7 +59,7 @@ int main()
     totalRes |= currentRes;
     std::cout << "Acc_Z: " << sensor.GetAccel_Z_Raw(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << " ";
+    std::cout << "Temp: " << sensor.GetTemperature_Celcius(&currentRes) << " ";
     totalRes |= currentRes;
     std::cout << "Gyro_X: " << sensor.GetGyro_X_Raw(&currentRes) << " ";
     totalRes |= currentRes;

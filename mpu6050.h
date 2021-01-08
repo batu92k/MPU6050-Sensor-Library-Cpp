@@ -191,7 +191,7 @@ public:
   * @param  error Error state of process
   * @retval float Temperature in celcius-degrees
   */
-  float GetTemperature(i2c_status_t* error);
+  float GetTemperature_Celcius(i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;
