@@ -53,11 +53,11 @@ int main()
   i2c_status_t currentRes = I2C_STATUS_SUCCESS;
   while(totalRes == I2C_STATUS_SUCCESS)
   {
-    std::cout << "Acc_X: " << sensor.GetAccel_X(&currentRes) << " ";
+    std::cout << "Acc_X: " << sensor.GetAccel_X_Raw(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Acc_Y: " << sensor.GetAccel_Y(&currentRes) << " ";
+    std::cout << "Acc_Y: " << sensor.GetAccel_Y_Raw(&currentRes) << " ";
     totalRes |= currentRes;
-    std::cout << "Acc_Z: " << sensor.GetAccel_Z(&currentRes) << " ";
+    std::cout << "Acc_Z: " << sensor.GetAccel_Z_Raw(&currentRes) << " ";
     totalRes |= currentRes;
     std::cout << "Temp: " << sensor.GetTemperature(&currentRes) << " ";
     totalRes |= currentRes;

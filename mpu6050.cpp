@@ -116,13 +116,13 @@ i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
 }
 
 /**
-  * @brief  This method used for getting the latest accelerometer X axis value from
+  * @brief  This method used for getting the latest accelerometer X axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
   * scale range is set to desired range, before reading the values.
   * @param  error Error state of process
-  * @retval uint16_t X axis acceleration value
+  * @retval int16_t X axis RAW acceleration value
   */
-int16_t MPU6050::GetAccel_X(i2c_status_t *error)
+int16_t MPU6050::GetAccel_X_Raw(i2c_status_t *error)
 {
   int16_t accelXVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_X_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
@@ -135,13 +135,13 @@ int16_t MPU6050::GetAccel_X(i2c_status_t *error)
 }
 
 /**
-  * @brief  This method used for getting the latest accelerometer Y axis value from
+  * @brief  This method used for getting the latest accelerometer Y axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
   * scale range is set to desired range, before reading the values.
   * @param  error Error state of process
-  * @retval uint16_t Y axis acceleration value
+  * @retval int16_t Y axis RAW acceleration value
   */
-int16_t MPU6050::GetAccel_Y(i2c_status_t *error)
+int16_t MPU6050::GetAccel_Y_Raw(i2c_status_t *error)
 {
   int16_t accelYVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_Y_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
@@ -154,13 +154,13 @@ int16_t MPU6050::GetAccel_Y(i2c_status_t *error)
 }
 
 /**
-  * @brief  This method used for getting the latest accelerometer Z axis value from
+  * @brief  This method used for getting the latest accelerometer Z axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
   * scale range is set to desired range, before reading the values.
   * @param  error Error state of process
-  * @retval uint16_t Z axis acceleration value
+  * @retval int16_t Z axis RAW acceleration value
   */
-int16_t MPU6050::GetAccel_Z(i2c_status_t *error)
+int16_t MPU6050::GetAccel_Z_Raw(i2c_status_t *error)
 {
   int16_t accelZVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_Z_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
