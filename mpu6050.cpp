@@ -150,6 +150,19 @@ i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
 }
 
 /**
+  * @brief  This method used for getting the acceleromteter full scale range.
+  * Check accel_full_scale_range_t for available scales. It basically reads the
+  * Accel configuration register and returns the full scale range.
+  * @param  error Result of the sensor reading process
+  * @retval accel_full_scale_range_t
+  */
+accel_full_scale_range_t MPU6050::GetAccelFullScale(i2c_status_t *error)
+{
+  uint8_t accelConfig = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_CONFIG, error);
+  return (accel_full_scale_range_t)((accelConfig >> 3) & 0x03);  
+}
+
+/**
   * @brief  This method used for getting the latest accelerometer X axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and accelerometer full
   * scale range is set to desired range, before reading the values.
