@@ -49,6 +49,14 @@
 #define REG_GYRO_Z_OUT_H 0x47
 #define REG_GYRO_Z_OUT_L 0x48
 
+/* Gyroscope offset registers */
+#define REG_XG_OFFS_USR_H 0x13
+#define REG_XG_OFFS_USR_L 0x14
+#define REG_YG_OFFS_USR_H 0x15
+#define REG_YG_OFFS_USR_L 0x16
+#define REG_ZG_OFFS_USR_H 0x17
+#define REG_ZG_OFFS_USR_L 0x18
+
 enum regbits_pwr_mgmt_1_t 
 {
   BIT_CLKSEL_0 = 0,
@@ -204,6 +212,30 @@ public:
   * @retval float Temperature in celcius-degrees
   */
   float GetTemperature_Celcius(i2c_status_t* error);
+
+  /**
+  * @brief  This method used for setting the gyroscope X axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetGyro_X_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for setting the gyroscope Y axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetGyro_Y_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for setting the gyroscope Z axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetGyro_Z_Offset(int16_t offset);
 
 private:
   I2C_Interface* i2c = nullptr;

@@ -210,3 +210,51 @@ float MPU6050::GetTemperature_Celcius(i2c_status_t *error)
 
   return 0x00;
 }
+
+/**
+  * @brief  This method used for setting the gyroscope X axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetGyro_X_Offset(int16_t offset)
+{
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XG_OFFS_USR_H, (offset >> 8));
+  if(result == I2C_STATUS_SUCCESS)
+  {
+    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XG_OFFS_USR_L, (offset & 0x00FF));
+  }
+  return result;
+}
+
+/**
+  * @brief  This method used for setting the gyroscope Y axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetGyro_Y_Offset(int16_t offset)
+{
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YG_OFFS_USR_H, (offset >> 8));
+  if(result == I2C_STATUS_SUCCESS)
+  {
+    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YG_OFFS_USR_L, (offset & 0x00FF));
+  }
+  return result;
+}
+
+/**
+  * @brief  This method used for setting the gyroscope Z axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetGyro_Z_Offset(int16_t offset)
+{
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZG_OFFS_USR_H, (offset >> 8));
+  if(result == I2C_STATUS_SUCCESS)
+  {
+    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZG_OFFS_USR_L, (offset & 0x00FF));
+  }
+  return result;
+}
