@@ -69,6 +69,19 @@ i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
 }
 
 /**
+  * @brief  This method used for getting the gyroscope full scale range.
+  * Check gyro_full_scale_range_t for available scales. It basically reads the
+  * Gyro configuration register and returns the full scale range.
+  * @param  error Result of the sensor reading process
+  * @retval gyro_full_scale_range_t
+  */
+gyro_full_scale_range_t MPU6050::GetGyroFullScale(i2c_status_t *error)
+{
+  uint8_t gyroConfig = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_CONFIG, error);
+  return (gyro_full_scale_range_t)((gyroConfig >> 3) & 0x03);
+}
+
+/**
   * @brief  This method used for getting the latest gyroscope X axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
   * scale range is set to desired range before reading the values.

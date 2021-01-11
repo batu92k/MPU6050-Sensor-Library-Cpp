@@ -144,6 +144,15 @@ public:
   i2c_status_t SetGyroFullScale(gyro_full_scale_range_t gyroScale);
 
   /**
+  * @brief  This method used for getting the gyroscope full scale range.
+  * Check gyro_full_scale_range_t for available scales. It basically reads the
+  * Gyro configuration register and returns the full scale range.
+  * @param  error Result of the sensor reading process
+  * @retval gyro_full_scale_range_t
+  */
+  gyro_full_scale_range_t GetGyroFullScale(i2c_status_t* error);
+
+  /**
   * @brief  This method used for getting the latest gyroscope X axis RAW value from
   * the sensor. Make sure that sensor is not in sleeping mode and gyroscope full
   * scale range is set to desired range before reading the values.
