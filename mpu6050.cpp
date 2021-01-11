@@ -284,3 +284,91 @@ i2c_status_t MPU6050::SetGyro_Z_Offset(int16_t offset)
   }
   return result;
 }
+
+/**
+  * @brief  This method used for calibrating the gyroscope registers to given target values.
+  * TODO: Use more detailed return type about the calibration status to inform user about the
+  * failure (which step it failed and why etc.).
+  * @param targetX target value for gyroscope X axis register
+  * @param targetY target value for gyroscope Y axis register
+  * @param targetZ target value for gyroscope Z axis register
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY, int16_t targetZ)
+{
+  i2c_status_t result = I2C_STATUS_NONE;
+  gyro_full_scale_range_t gyroRange = GetGyroFullScale(&result);
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  /* DPS constant to convert raw register value to the 
+   * degree per seconds (angular velocity). 
+   * TODO: make this values to constant array and use a getter method to get them! */
+  float dpsConstant = 0;
+  if(gyroRange == GYRO_SCALE_250)
+    dpsConstant = 250.0f / 32767.0f;
+  else if(gyroRange == GYRO_SCALE_500)
+    dpsConstant = 500.0f / 32767.0f;
+  else if(gyroRange == GYRO_SCALE_1000)
+    dpsConstant = 1000.0f / 32767.0f;
+  else
+    dpsConstant = 2000.0f / 32767.0f;
+
+  float sumOfSamples = 0;
+  int16_t offsetVal = 0;
+
+  /*
+   * Gyro X axis calibration
+   */
+  for(uint16_t i = 0; i < 1000 && result == I2C_STATUS_SUCCESS; i++)
+  {
+    sumOfSamples += GetGyro_X_Raw(&result);
+  }
+  sumOfSamples *= 0.001f; // get mean value of 1000 readings
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  offsetVal = (int16_t)(((targetX - sumOfSamples) * dpsConstant) * GYRO_OFFSET_1DPS);
+  result = SetGyro_X_Offset(offsetVal);
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  /*
+   * Gyro Y axis calibration
+   */
+  sumOfSamples = 0;
+  for(uint16_t i = 0; i < 1000 && result == I2C_STATUS_SUCCESS; i++)
+  {
+    sumOfSamples += GetGyro_Y_Raw(&result);
+  }
+  sumOfSamples *= 0.001f; // get mean value of 1000 readings
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  offsetVal = (int16_t)(((targetY - sumOfSamples) * dpsConstant) * GYRO_OFFSET_1DPS);
+  result = SetGyro_Y_Offset(offsetVal);
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  /*
+   * Gyro Z axis calibration
+   */
+  sumOfSamples = 0;
+  for(uint16_t i = 0; i < 1000 && result == I2C_STATUS_SUCCESS; i++)
+  {
+    sumOfSamples += GetGyro_Z_Raw(&result);
+  }
+  sumOfSamples *= 0.001f; // get mean value of 1000 readings
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  offsetVal = (int16_t)(((targetZ - sumOfSamples) * dpsConstant) * GYRO_OFFSET_1DPS);
+  result = SetGyro_Z_Offset(offsetVal);
+
+  return result;
+}

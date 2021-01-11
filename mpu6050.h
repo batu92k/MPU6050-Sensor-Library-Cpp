@@ -57,6 +57,10 @@
 #define REG_ZG_OFFS_USR_H 0x17
 #define REG_ZG_OFFS_USR_L 0x18
 
+/* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
+ * Check sensor datasheet for more info about the offset procedure! */
+#define GYRO_OFFSET_1DPS 32.8f
+
 enum regbits_pwr_mgmt_1_t 
 {
   BIT_CLKSEL_0 = 0,
@@ -254,6 +258,15 @@ public:
   * @retval i2c_status_t
   */
   i2c_status_t SetGyro_Z_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for calibrating the gyroscope registers to given target values.
+  * @param targetX target value for gyroscope X axis register
+  * @param targetY target value for gyroscope Y axis register
+  * @param targetZ target value for gyroscope Z axis register
+  * @retval i2c_status_t
+  */
+  i2c_status_t Calibrate_Gyro_Registers(int16_t targetX = 0, int16_t targetY = 0, int16_t targetZ = 0);
 
 private:
   I2C_Interface* i2c = nullptr;
