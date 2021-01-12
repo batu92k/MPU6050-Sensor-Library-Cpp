@@ -276,6 +276,15 @@ public:
   */
   i2c_status_t Calibrate_Gyro_Registers(int16_t targetX = 0, int16_t targetY = 0, int16_t targetZ = 0);
 
+  /**
+  * @brief  This method returns the DPS (Degree Per Second) coversion value depending on
+  * the gyroscope full scale range. DPS value is used to convert raw sensor value to angular
+  * velocity for orientation related calculations.
+  * @param gyroRange Configured gyro full scale range
+  * @retval float
+  */
+  float GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange);
+
 private:
   I2C_Interface* i2c = nullptr;
   /* DPS constant to convert raw register value to the degree per seconds (angular velocity).

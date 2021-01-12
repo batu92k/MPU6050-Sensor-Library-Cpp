@@ -379,3 +379,15 @@ i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY,
 
   return result;
 }
+
+/**
+  * @brief  This method returns the DPS (Degree Per Second) coversion value depending on
+  * the gyroscope full scale range. DPS value is used to convert raw sensor value to angular
+  * velocity for orientation related calculations.
+  * @param gyroRange Configured gyro full scale range
+  * @retval float
+  */
+float MPU6050::GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange)
+{
+  return dpsConstantArr[gyroRange];
+}
