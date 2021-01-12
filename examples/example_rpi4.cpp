@@ -25,11 +25,25 @@ int main()
   }
 
   MPU6050 sensor(i2c_if);
+  if(sensor.ResetSensor() != I2C_STATUS_SUCCESS)
+  {
+    std::cout << "Sensor reset failed!\n";
+    return EXIT_FAILURE;    
+  }
+  /* Simple safety delay after sensor reset */
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
   
   /* Wakeup sensor and set full scale ranges */
-  if(sensor.InitializeSensor(GYRO_SCALE_500, ACCEL_SCALE_8G) != I2C_STATUS_SUCCESS)
+  if(sensor.InitializeSensor(GYRO_SCALE_1000, ACCEL_SCALE_8G) != I2C_STATUS_SUCCESS)
   {
     std::cout << "Sensor initialization failed!\n";
+    return EXIT_FAILURE;
+  }
+
+  /* Calibrate gyroscope registers to target value 0 (default) */
+  if(sensor.Calibrate_Gyro_Registers() != I2C_STATUS_SUCCESS)
+  {
+    std::cout << "Gyro calibration failed!\n";
     return EXIT_FAILURE;
   }
 
