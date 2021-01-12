@@ -12,6 +12,7 @@
 
 #include "i2c_interface.h"
 
+/* TODO: Make a setter for device address. Use enum for 2 possible sensor address! */
 #define AD0 1
 
 /* MPU6050 I2C Device Address */
