@@ -301,6 +301,9 @@ i2c_status_t MPU6050::SetGyro_Z_Offset(int16_t offset)
 
 /**
   * @brief  This method used for calibrating the gyroscope registers to given target values.
+  * Its VERY important to mention that when you call this method make sure that the sensor is
+  * standing statically (no vibrations, no rotations, no movement etc.) otherwise you will end
+  * up with wrong calibration values!
   * TODO: Use more detailed return type about the calibration status to inform user about the
   * failure (which step it failed and why etc.).
   * @param targetX target value for gyroscope X axis register
@@ -316,18 +319,8 @@ i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY,
     return result;
 
   /* DPS constant to convert raw register value to the 
-   * degree per seconds (angular velocity). 
-   * TODO: make this values to constant array and use a getter method to get them! */
-  float dpsConstant = 0;
-  if(gyroRange == GYRO_SCALE_250)
-    dpsConstant = 250.0f / 32767.0f;
-  else if(gyroRange == GYRO_SCALE_500)
-    dpsConstant = 500.0f / 32767.0f;
-  else if(gyroRange == GYRO_SCALE_1000)
-    dpsConstant = 1000.0f / 32767.0f;
-  else
-    dpsConstant = 2000.0f / 32767.0f;
-
+   * degree per seconds (angular velocity). */
+  const float dpsConstant = dpsConstantArr[gyroRange];
   float sumOfSamples = 0;
   int16_t offsetVal = 0;
 

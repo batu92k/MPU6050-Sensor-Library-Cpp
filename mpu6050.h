@@ -278,6 +278,10 @@ public:
 
 private:
   I2C_Interface* i2c = nullptr;
+  /* DPS constant to convert raw register value to the degree per seconds (angular velocity).
+   * The index of the values are adjusted to have corresponding values with the gyro_full_scale_range_t
+   * enum. So, we can just get the DPS value by "dpsConstantArr[GYRO_SCALE_250]"" for GYRO_SCALE_250. */
+  const float dpsConstantArr[4] = {250.0f / 32767.0f, 500.0f / 32767.0f, 1000.0f / 32767.0f, 2000.0f / 32767.0f};
 
 };
 
