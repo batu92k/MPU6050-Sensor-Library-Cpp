@@ -58,6 +58,20 @@ i2c_status_t MPU6050::WakeUpSensor(void)
 }
 
 /**
+  * @brief  This method resets the sensor by simply setting the REG_PWR_MGMT_1
+  * Device_Reset bit. After the sensor reset this bit will be cleared automatically.
+  * TODO: Can be modify later to check the Device_Reset bit is clear after the reset
+  * in order to make it safer (for this we probably need an interface for platform
+  * delay function).
+  * @param  none
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::ResetSensor(void)
+{
+  return i2c->WriteRegisterBit(MPU6050_ADDRESS, REG_PWR_MGMT_1, BIT_DEVICE_RESET, true);
+}
+
+/**
   * @brief  This method used for configuring the gyroscope full scale range.
   * Check gyro_full_scale_range_t for available scales.
   * @param  gyroScale Gyroscope scale value to be set
