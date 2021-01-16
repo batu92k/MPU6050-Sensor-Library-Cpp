@@ -324,6 +324,13 @@ public:
   i2c_status_t SetAccel_X_Offset(int16_t offset);
 
   /**
+  * @brief  This method used for getting the accelerometer X axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+  int16_t GetAccel_X_Offset(i2c_status_t* error);
+
+  /**
   * @brief  This method used for setting the accelerometer Y axis offset value. Offset is
   * using in the sensor calibration routine.
   * @param offset
@@ -332,12 +339,26 @@ public:
   i2c_status_t SetAccel_Y_Offset(int16_t offset);
 
   /**
+  * @brief  This method used for getting the accelerometer Y axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+  int16_t GetAccel_Y_Offset(i2c_status_t* error);
+
+  /**
   * @brief  This method used for setting the accelerometer Z axis offset value. Offset is
   * using in the sensor calibration routine.
   * @param offset
   * @retval i2c_status_t
   */
   i2c_status_t SetAccel_Z_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for getting the accelerometer Z axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+  int16_t GetAccel_Z_Offset(i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;

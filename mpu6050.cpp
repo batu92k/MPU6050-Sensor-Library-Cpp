@@ -460,6 +460,23 @@ i2c_status_t MPU6050::SetAccel_X_Offset(int16_t offset)
 }
 
 /**
+  * @brief  This method used for getting the accelerometer X axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+int16_t MPU6050::GetAccel_X_Offset(i2c_status_t *error)
+{
+  int16_t accelXOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    accelXOffset = (accelXOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_L, error); // assemble higher and lower bytes
+    return accelXOffset;
+  }
+
+  return 0x00;
+}
+
+/**
   * @brief  This method used for setting the accelerometer Y axis offset value. Offset is
   * using in the sensor calibration routine.
   * @param offset
@@ -476,6 +493,23 @@ i2c_status_t MPU6050::SetAccel_Y_Offset(int16_t offset)
 }
 
 /**
+  * @brief  This method used for getting the accelerometer Y axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+int16_t MPU6050::GetAccel_Y_Offset(i2c_status_t *error)
+{
+  int16_t accelYOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    accelYOffset = (accelYOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_L, error); // assemble higher and lower bytes
+    return accelYOffset;
+  }
+
+  return 0x00; 
+}
+
+/**
   * @brief  This method used for setting the accelerometer Z axis offset value. Offset is
   * using in the sensor calibration routine.
   * @param offset
@@ -489,4 +523,21 @@ i2c_status_t MPU6050::SetAccel_Z_Offset(int16_t offset)
     result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;  
+}
+
+/**
+  * @brief  This method used for getting the accelerometer Z axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+int16_t MPU6050::GetAccel_Z_Offset(i2c_status_t *error)
+{
+  int16_t accelZOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_H, error); // higher 8 bits
+  if(*error == I2C_STATUS_SUCCESS)
+  {
+    accelZOffset = (accelZOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_L, error); // assemble higher and lower bytes
+    return accelZOffset;
+  }
+
+  return 0x00;   
 }
