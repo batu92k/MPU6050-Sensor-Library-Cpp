@@ -58,6 +58,14 @@
 #define REG_ZG_OFFS_USR_H 0x17
 #define REG_ZG_OFFS_USR_L 0x18
 
+/* Accellerometer offset registers */
+#define REG_XA_OFFS_USR_H 0x06
+#define REG_XA_OFFS_USR_L 0x07
+#define REG_YA_OFFS_USR_H 0x08
+#define REG_YA_OFFS_USR_L 0x09
+#define REG_ZA_OFFS_USR_H 0x0A
+#define REG_ZA_OFFS_USR_L 0x0B
+
 /* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
  * Check sensor datasheet for more info about the offset procedure! */
 #define GYRO_OFFSET_1DPS 32.8f
@@ -285,6 +293,30 @@ public:
   * @retval float
   */
   float GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange);
+
+  /**
+  * @brief  This method used for setting the accelerometer X axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetAccel_X_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for setting the accelerometer Y axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetAccel_Y_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for setting the accelerometer Z axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetAccel_Z_Offset(int16_t offset);
 
 private:
   I2C_Interface* i2c = nullptr;

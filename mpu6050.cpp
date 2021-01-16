@@ -391,3 +391,51 @@ float MPU6050::GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange)
 {
   return dpsConstantArr[gyroRange];
 }
+
+/**
+  * @brief  This method used for setting the accelerometer X axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetAccel_X_Offset(int16_t offset)
+{
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_H, (offset >> 8));
+  if(result == I2C_STATUS_SUCCESS)
+  {
+    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_L, (offset & 0x00FF));
+  }
+  return result;   
+}
+
+/**
+  * @brief  This method used for setting the accelerometer Y axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetAccel_Y_Offset(int16_t offset)
+{
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_H, (offset >> 8));
+  if(result == I2C_STATUS_SUCCESS)
+  {
+    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_L, (offset & 0x00FF));
+  }
+  return result;  
+}
+
+/**
+  * @brief  This method used for setting the accelerometer Z axis offset value. Offset is
+  * using in the sensor calibration routine.
+  * @param offset
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetAccel_Z_Offset(int16_t offset)
+{
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_H, (offset >> 8));
+  if(result == I2C_STATUS_SUCCESS)
+  {
+    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_L, (offset & 0x00FF));
+  }
+  return result;  
+}
