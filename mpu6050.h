@@ -261,6 +261,13 @@ public:
   i2c_status_t SetGyro_X_Offset(int16_t offset);
 
   /**
+  * @brief  This method used for getting the gyroscope X axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+  int16_t GetGyro_X_Offset(i2c_status_t* error);
+
+  /**
   * @brief  This method used for setting the gyroscope Y axis offset value. Offset is
   * using in the sensor calibration routine.
   * @param offset
@@ -269,12 +276,26 @@ public:
   i2c_status_t SetGyro_Y_Offset(int16_t offset);
 
   /**
+  * @brief  This method used for getting the gyroscope Y axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+  int16_t GetGyro_Y_Offset(i2c_status_t* error);
+
+  /**
   * @brief  This method used for setting the gyroscope Z axis offset value. Offset is
   * using in the sensor calibration routine.
   * @param offset
   * @retval i2c_status_t
   */
   i2c_status_t SetGyro_Z_Offset(int16_t offset);
+
+  /**
+  * @brief  This method used for getting the gyroscope Z axis offset value.
+  * @param error Result of the operation
+  * @retval int16_t
+  */
+  int16_t GetGyro_Z_Offset(i2c_status_t* error);
 
   /**
   * @brief  This method used for calibrating the gyroscope registers to given target values.
