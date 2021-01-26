@@ -40,10 +40,18 @@ int main()
     return EXIT_FAILURE;
   }
 
-  /* Calibrate gyroscope registers to target value 0 (default) */
+  /* Auto-Calibrate gyroscope registers to target value 0 (default) */
   if(sensor.Calibrate_Gyro_Registers() != I2C_STATUS_SUCCESS)
   {
     std::cout << "Gyro calibration failed!\n";
+    return EXIT_FAILURE;
+  }
+
+  /* Auto-Calibrate accelerometer registers to target values by default: 
+   * X = 0 MG, Y = 0 MG, Z = 1 MG */
+  if(sensor.Calibrate_Accel_Registers() != I2C_STATUS_SUCCESS)
+  {
+    std::cout << "Accel calibration failed!\n";
     return EXIT_FAILURE;
   }
 
