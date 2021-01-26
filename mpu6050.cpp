@@ -541,3 +541,267 @@ int16_t MPU6050::GetAccel_Z_Offset(i2c_status_t *error)
 
   return 0x00;   
 }
+
+/**
+  * @brief  This method used for calibrating the accelerometer registers to given target values. Even if
+  * the official calibration method in the invensense application notes are tried, it didnt work as expected.
+  * So there is another method implemented to calibrate accelerometer registers automatically. It works with the
+  * similar concept of binary search algorithm (setting a range and narrowing on each step).
+  * @param targetX target value for accelerometer X axis register in MG so 1.0f means 1G
+  * @param targetY target value for accelerometer Y axis register in MG
+  * @param targetZ target value for accelerometer Z axis register in MG
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::Calibrate_Accel_Registers(float targetX_MG, float targetY_MG, float targetZ_MG)
+{
+  i2c_status_t result = I2C_STATUS_NONE;
+  accel_full_scale_range_t accelRange = GetAccelFullScale(&result);
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  /* MG constant to convert raw register value to the 
+   * gravity (9.81 m/s2). */
+  const float mgConstant = mgCostantArr[accelRange];
+
+  /* Some constants for our calibration routine to modify easily when needed. */
+  const int16_t calibrationRangeHigh = 4096;
+  const int16_t calibrationRangeLow = -calibrationRangeHigh;
+  const uint8_t calibrationSteps = 13; // if the calibrationRangeHigh = 2^n so this will be (n +1)
+  const int tolerance = 5; // acceptable tolerance between target and mean value of samples
+
+  float meanOfNSamples = 0;
+  int16_t regExpected = 0;
+  int16_t diff = 0;
+  int16_t high = calibrationRangeHigh;
+  int16_t low = calibrationRangeLow;
+  int16_t currentOffsetVal = 0;
+
+  result = SetAccel_X_Offset(0); // set the offset to 0 first
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  result = SetAccel_Y_Offset(0); // set the offset to 0 first
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  result = SetAccel_Z_Offset(0); // set the offset to 0 first
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  /*
+   * Accel X axis calibration
+   */
+  regExpected = targetX_MG / mgConstant;
+
+  /* Get the initial deviation from our target value after reseting the offset register */
+  meanOfNSamples = 0;
+  for (uint8_t i = 0; i < 100 && result == I2C_STATUS_SUCCESS; i++)
+  {
+    meanOfNSamples += GetAccel_X_Raw(&result);
+  }
+
+  if(result != I2C_STATUS_SUCCESS)
+    return result;
+
+  meanOfNSamples *= 0.01;
+  diff = regExpected - meanOfNSamples;
+
+  /* Limit our ranges depending on the initial results. So we
+   * are either work on negative or positive range during the 
+   * calibration steps. */
+  if (diff < 0)
+    high = 0;
+  else
+    low = 0;
+
+  /* Start N steps of calibration. This method is very similar to binary search
+   * algorightm in sorted list. On every iteration we are setting the offset register
+   * to a middle value of our high and low range then we read 100 samples from 
+   * Accelerometer and compare our target and mean value of the samples. Depending on the
+   * result we are narrowing our high and low limits and repeat... */
+  for (uint8_t step = 0; step < calibrationSteps; step++)
+  {
+    /* Update offset register! */
+    currentOffsetVal = (int16_t)((high + low) /2.0f);
+    result = SetAccel_X_Offset(currentOffsetVal);
+    if (result != I2C_STATUS_SUCCESS)
+      return result;
+
+    /* Take 100 samples and compare with target */
+    meanOfNSamples = 0;
+    for (uint8_t i = 0; i < 100 && result == I2C_STATUS_SUCCESS; i++)
+    {
+      meanOfNSamples += GetAccel_X_Raw(&result);
+    }
+
+    if (result != I2C_STATUS_SUCCESS)
+      return result;
+
+    meanOfNSamples *= 0.01;
+    diff = regExpected - meanOfNSamples;
+
+    /* Quick math.abs to check if difference is in tolerance level.
+     * If yes abort calibration for this axis its done already! */
+    if((diff & 0x8000 ? -diff : diff) < tolerance)
+      break;
+
+    /* Update ranges! */
+    if(diff < 0)
+      high = currentOffsetVal;
+    else
+      low = currentOffsetVal;
+  } // for calibrationSteps
+
+  /*
+   * Accel Y axis calibration (TODO: unfortunately bad practice of code reusing but keep it for now!)
+   */
+  high = calibrationRangeHigh;
+  low = calibrationRangeLow;
+  currentOffsetVal = 0;
+
+  regExpected = targetY_MG / mgConstant;
+
+  /* Get the initial deviation from our target value after reseting the offset register */
+  meanOfNSamples = 0;
+  for (uint8_t i = 0; i < 100 && result == I2C_STATUS_SUCCESS; i++)
+  {
+    meanOfNSamples += GetAccel_Y_Raw(&result);
+  }
+
+  if (result != I2C_STATUS_SUCCESS)
+    return result;
+
+  meanOfNSamples *= 0.01;
+  diff = regExpected - meanOfNSamples;
+
+  /* Limit our ranges depending on the initial results. So we
+   * are either work on negative or positive range during the 
+   * calibration steps. */
+  if (diff < 0)
+    high = 0;
+  else
+    low = 0;
+
+  /* Start N steps of calibration. This method is very similar to binary search
+   * algorightm in sorted list. On every iteration we are setting the offset register
+   * to a middle value of our high and low range then we read 100 samples from 
+   * Accelerometer and compare our target and mean value of the samples. Depending on the
+   * result we are narrowing our high and low limits and repeat... */
+  for (uint8_t step = 0; step < calibrationSteps; step++)
+  {
+    /* Update offset register! */
+    currentOffsetVal = (int16_t)((high + low) /2.0f);
+    result = SetAccel_Y_Offset(currentOffsetVal);
+    if (result != I2C_STATUS_SUCCESS)
+      return result;
+
+    /* Take 100 samples and compare with target */
+    meanOfNSamples = 0;
+    for (uint8_t i = 0; i < 100 && result == I2C_STATUS_SUCCESS; i++)
+    {
+      meanOfNSamples += GetAccel_Y_Raw(&result);
+    }
+
+    if (result != I2C_STATUS_SUCCESS)
+      return result;
+
+    meanOfNSamples *= 0.01;
+    diff = regExpected - meanOfNSamples;
+
+    /* Quick math.abs to check if difference is in tolerance level.
+     * If yes abort calibration for this axis its done already! */
+    if((diff & 0x8000 ? -diff : diff) < tolerance)
+      break;
+
+    /* Update ranges! */
+    if(diff < 0)
+      high = currentOffsetVal;
+    else
+      low = currentOffsetVal;
+  } // for calibrationSteps
+
+  /*
+   * Accel Z axis calibration (TODO: unfortunately bad practice of code reusing but keep it for now!)
+   */
+  high = calibrationRangeHigh;
+  low = calibrationRangeLow;
+  currentOffsetVal = 0;
+
+  regExpected = targetZ_MG / mgConstant;
+
+  /* Get the initial deviation from our target value after reseting the offset register */
+  meanOfNSamples = 0;
+  for (uint8_t i = 0; i < 100 && result == I2C_STATUS_SUCCESS; i++)
+  {
+    meanOfNSamples += GetAccel_Z_Raw(&result);
+  }
+
+  if (result != I2C_STATUS_SUCCESS)
+    return result;
+
+  meanOfNSamples *= 0.01;
+  diff = regExpected - meanOfNSamples;
+
+  /* Limit our ranges depending on the initial results. So we
+   * are either work on negative or positive range during the 
+   * calibration steps. */
+  if (diff < 0)
+    high = 0;
+  else
+    low = 0;
+
+  /* Start N steps of calibration. This method is very similar to binary search
+   * algorightm in sorted list. On every iteration we are setting the offset register
+   * to a middle value of our high and low range then we read 100 samples from 
+   * Accelerometer and compare our target and mean value of the samples. Depending on the
+   * result we are narrowing our high and low limits and repeat... */
+  for (uint8_t step = 0; step < calibrationSteps; step++)
+  {
+    /* Update offset register! */
+    currentOffsetVal = (int16_t)((high + low) /2.0f);
+    result = SetAccel_Z_Offset(currentOffsetVal);
+    if (result != I2C_STATUS_SUCCESS)
+      return result;
+
+    /* Take 100 samples and compare with target */
+    meanOfNSamples = 0;
+    for (uint8_t i = 0; i < 100 && result == I2C_STATUS_SUCCESS; i++)
+    {
+      meanOfNSamples += GetAccel_Z_Raw(&result);
+    }
+
+    if (result != I2C_STATUS_SUCCESS)
+      return result;
+
+    meanOfNSamples *= 0.01;
+    diff = regExpected - meanOfNSamples;
+
+    /* Quick math.abs to check if difference is in tolerance level.
+     * If yes abort calibration for this axis its done already! */
+    if((diff & 0x8000 ? -diff : diff) < tolerance)
+      break;
+
+    /* Update ranges! */
+    if(diff < 0)
+      high = currentOffsetVal;
+    else
+      low = currentOffsetVal;
+  } // for calibrationSteps
+
+  return result;
+}
+
+/**
+  * @brief  This method returns the MG (Gravity) coversion value depending on
+  * the accelerometer full scale range. MG value is used to convert raw sensor value to Gravity
+  * for acceleration related calculations.
+  * @param accelRange Configured accelerometer full scale range
+  * @retval float
+  */
+float MPU6050::GetAccel_MG_Constant(accel_full_scale_range_t accelRange)
+{
+  return mgCostantArr[accelRange];
+}

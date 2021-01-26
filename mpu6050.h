@@ -70,6 +70,13 @@
  * Check sensor datasheet for more info about the offset procedure! */
 #define GYRO_OFFSET_1DPS 32.8f
 
+/* TODO: This value is not using currently. After some experiments and tests somehow
+ * offset procedure didnt work as expected in the application notes. So another method
+ * applied for auto-calibration, keep the value for future consideration!
+ * Accel offset register constant to compensate 1 MG (Gravity - 9.81 m/s2) offset.
+ * Check sensor datasheet for more info about the offset procedure! */
+#define ACCEL_OFFSET_1MG 4096.0f
+
 enum regbits_pwr_mgmt_1_t 
 {
   BIT_CLKSEL_0 = 0,
@@ -360,12 +367,35 @@ public:
   */
   int16_t GetAccel_Z_Offset(i2c_status_t* error);
 
+  /**
+  * @brief  This method used for calibrating the accelerometer registers to given target values.
+  * @param targetX target value for accelerometer X axis register in MG so 1.0f means 1G
+  * @param targetY target value for accelerometer Y axis register in MG
+  * @param targetZ target value for accelerometer Z axis register in MG
+  * @retval i2c_status_t
+  */
+  i2c_status_t Calibrate_Accel_Registers(float targetX_MG = 0.0f, float targetY_MG = 0.0f, float targetZ_MG = 1.0f);
+
+  /**
+  * @brief  This method returns the MG (Gravity) coversion value depending on
+  * the accelerometer full scale range. MG value is used to convert raw sensor value to Gravity
+  * for acceleration related calculations.
+  * @param accelRange Configured accelerometer full scale range
+  * @retval float
+  */
+  float GetAccel_MG_Constant(accel_full_scale_range_t accelRange);
+
 private:
   I2C_Interface* i2c = nullptr;
   /* DPS constant to convert raw register value to the degree per seconds (angular velocity).
    * The index of the values are adjusted to have corresponding values with the gyro_full_scale_range_t
    * enum. So, we can just get the DPS value by "dpsConstantArr[GYRO_SCALE_250]"" for GYRO_SCALE_250. */
   const float dpsConstantArr[4] = {250.0f / 32767.0f, 500.0f / 32767.0f, 1000.0f / 32767.0f, 2000.0f / 32767.0f};
+
+  /* MG constant to convert raw register value to gravity (9.81 m/s2). The index of the values are
+   * adjusted to have corresponding values with the accel_full_scale_range_t enum. So, we can just get
+   * the MG value by "mgConstantArr[ACCEL_SCALE_2G]"" for ACCEL_SCALE_2G. */
+  const float mgCostantArr[4] = {2.0f / 32767.0f, 4.0f / 32767.0f, 8.0f / 32767.0f, 16.0f / 32767.0f};
 
 };
 
