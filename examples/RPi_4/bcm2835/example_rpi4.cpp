@@ -9,7 +9,7 @@
 #include <thread> // std::this_thread::sleep_for
 #include <chrono> // std::chrono::milliseconds
 #include <iostream>
-#include "../mpu6050.h"
+#include "mpu6050.h"
 #include "bcm2835_i2c_if.h"
 
 

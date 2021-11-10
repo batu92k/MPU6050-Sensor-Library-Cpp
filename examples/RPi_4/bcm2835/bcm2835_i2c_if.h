@@ -7,7 +7,7 @@
   ******************************************************************************
   */
 
-#include "../i2c_interface.h"
+#include "i2c_interface.h"
 
 #ifndef BCM2835_I2C_IF_H
 #define BCM2835_I2C_IF_H
