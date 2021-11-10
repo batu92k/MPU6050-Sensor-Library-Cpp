@@ -1,12 +1,12 @@
 # Project Makefile 20201219 - Ali Batuhan KINDAN
+#TODO: use more variables to comfortably automate the compilation process
+
 DRIVER_DIR = ../../../
 OBJ = $(wildcard build/*.o)
 
 all: main
 
 main: create_build_folder compile_all
-#	$(info -> Creating executable)
-#	@g++ -o build/example_rpi4 build/example_rpi4.o build/bcm2835_i2c_if.o build/mpu6050.o build/i2c_interface.o -l bcm2835 -I $(DRIVER_DIR)
 
 create_build_folder:
 	$(info -> Creating build folder if not exist)
