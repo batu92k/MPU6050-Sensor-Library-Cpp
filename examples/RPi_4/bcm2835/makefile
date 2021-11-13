@@ -2,7 +2,15 @@
 #TODO: use more variables to comfortably automate the compilation process
 
 DRIVER_DIR = ../../../
-OBJ = $(wildcard build/*.o)
+OBJS = $(wildcard build/*.o)
+# LFLAGS included libraries
+LFLAGS= -lbcm2835
+# IFLAGS included folders for header files
+IFLAGS= -I $(DRIVER_DIR)
+# CPPSTD compiler standard
+CPPSTD= -std=c++11
+## CC Compiler
+CC= g++
 
 all: main
 
@@ -14,23 +22,23 @@ create_build_folder:
 
 compile_all: example_rpi4.o bcm2835_i2c_if.o mpu6050.o i2c_interface.o
 	$(info -> Creating executable)
-	@g++ -o build/example_rpi4 $(OBJ) -l bcm2835 -I $(DRIVER_DIR)
+	@$(CC) -o build/example_rpi4 $(CPPSTD) $(OBJS) $(LFLAGS) $(IFLAGS)
 
 example_rpi4.o: example_rpi4.cpp
 	$(info -> Compiling example.cpp)
-	@g++ -c -Wall $^ -o build/$@ -I $(DRIVER_DIR)
+	@$(CC) -c -Wall $^ -o build/$@ $(CPPSTD) $(LFLAGS) $(IFLAGS)
 
 bcm2835_i2c_if.o: bcm2835_i2c_if.cpp
 	$(info -> Compiling bcm2835_i2c_if.cpp)
-	@g++ -c -Wall $^ -l bcm2835 -o build/$@ -I $(DRIVER_DIR)
+	@$(CC) -c -Wall $^ -o build/$@ $(CPPSTD) $(LFLAGS) $(IFLAGS)
 
 i2c_interface.o: $(DRIVER_DIR)i2c_interface.cpp
 	$(info -> Compiling i2c_interface.cpp)
-	@g++ -c -Wall $^ -o build/$@ -I $(DRIVER_DIR)
+	@$(CC) -c -Wall $^ -o build/$@ $(CPPSTD) $(LFLAGS) $(IFLAGS)
 
 mpu6050.o: $(DRIVER_DIR)mpu6050.cpp
 	$(info -> Compiling mpu6050.cpp)
-	@g++ -c -Wall $^ -o build/$@ -I $(DRIVER_DIR)
+	@$(CC) -c -Wall $^ -o build/$@ $(CPPSTD) $(LFLAGS) $(IFLAGS)
 
 clean:
 	$(info -> Cleaning build files and executable)
