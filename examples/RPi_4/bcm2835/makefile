@@ -14,7 +14,7 @@ CPPSTD = -std=c++11
 # CC Compiler
 CC= g++
 # EXE Executable name
-EXE = example_rpi4
+EXE = example_rpi4_bcm2835
 
 all: main
 
@@ -24,11 +24,11 @@ create_build_folder:
 	$(info -> Creating build folder if not exist)
 	@mkdir -p build
 
-compile_all: example_rpi4.o bcm2835_i2c_if.o mpu6050.o i2c_interface.o
+compile_all: example_rpi4_bcm2835.o bcm2835_i2c_if.o mpu6050.o i2c_interface.o
 	$(info -> Creating executable)
 	@$(CC) -o build/$(EXE) $(CPPSTD) $(OBJS) $(LFLAGS) $(IFLAGS)
 
-example_rpi4.o: example_rpi4.cpp
+example_rpi4_bcm2835.o: example_rpi4_bcm2835.cpp
 	$(info -> Compiling example.cpp)
 	@$(CC) -c $(WFLAGS) $^ -o build/$@ $(CPPSTD) $(LFLAGS) $(IFLAGS)
 

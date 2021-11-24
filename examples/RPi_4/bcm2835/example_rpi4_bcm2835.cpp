@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    example_rpi4.cpp
+  * @file    example_rpi4_bcm2835.cpp
   * @author  Ali Batuhan KINDAN
   * @date    19.12.2020
   * @brief   Example application for Rpi4 to show MPU6050 driver features.
