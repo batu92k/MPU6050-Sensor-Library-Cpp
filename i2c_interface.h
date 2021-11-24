@@ -45,7 +45,14 @@ public:
   * @param  baudrate I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  virtual i2c_status_t Init_I2C(uint32_t baudrate = 100000) = 0;
+  virtual i2c_status_t Init_I2C(uint32_t baudrate = 100000) {return I2C_STATUS_NONE;};
+
+  /**
+  * @brief  I2C peripheral initialization method.
+  * @param  slaveAddress adress of the device that will be communicated
+  * @retval i2c_status_t
+  */
+  virtual i2c_status_t Init_I2C(uint8_t slaveAddress) {return I2C_STATUS_NONE;};
 
   /**
   * @brief  This method will be used for reading the data of the given register from
