@@ -21,7 +21,7 @@ public:
   * @param  baudrate I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  i2c_status_t Init_I2C(uint32_t baudrate = 100000);
+  i2c_status_t Init_I2C(uint32_t baudrate = 100000) override;
 
   /**
   * @brief  This method will be used for reading the data of the given register from
@@ -31,7 +31,7 @@ public:
   * @param  status Pointer for operation status
   * @retval uint8_t Read register value
   */
-  uint8_t ReadRegister(uint8_t slaveAddress, uint8_t regAddress, i2c_status_t *status);
+  uint8_t ReadRegister(uint8_t slaveAddress, uint8_t regAddress, i2c_status_t *status) override;
 
   /**
   * @brief  This method will be used for writing gven data to the given register of the slave device 
@@ -41,14 +41,14 @@ public:
   * @param  data Data to be written
   * @retval i2c_status_t
   */
-  i2c_status_t WriteRegister(uint8_t slaveAddress, uint8_t regAddress, uint8_t data);
+  i2c_status_t WriteRegister(uint8_t slaveAddress, uint8_t regAddress, uint8_t data) override;
 
   /**
   * @brief  Class destructor.
   * @param  none
   * @retval none
   */  
-  ~BCM2835_I2C_IF();
+  ~BCM2835_I2C_IF() override;
 };
 
 #endif
