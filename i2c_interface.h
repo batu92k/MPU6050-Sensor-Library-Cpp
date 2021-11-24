@@ -40,6 +40,8 @@ public:
   */
   virtual ~I2C_Interface() {/* empty virtual destructor */};
 
+  /* TODO: Init_I2C methods should be differenciated by compiler without the need of casting! */
+
   /**
   * @brief  I2C peripheral initialization method.
   * @param  baudrate I2C clock frequency (default 100 kHz)
