@@ -49,6 +49,10 @@ public:
   * @retval none
   */  
   ~ESP32_I2C_IF() override;
+  private:
+  const uint8_t I2C_Master_Port = 0;
+  const uint16_t I2C_Timeout_ms = 100;
+
 };
 
 #endif

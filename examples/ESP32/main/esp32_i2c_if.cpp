@@ -8,6 +8,7 @@
   */
 
 #include "esp32_i2c_if.h"
+#include "driver/i2c.h"
 
   /**
   * @brief  I2C peripheral initialization method.
@@ -15,8 +16,18 @@
   * @retval i2c_status_t
   */
   i2c_status_t ESP32_I2C_IF::Init_I2C(uint32_t baudrate) {
-      /* TODO: implement */
-      return I2C_STATUS_NONE;
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = 21;
+    conf.scl_io_num = 22;
+    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.master.clk_speed = baudrate;
+    conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
+
+    i2c_param_config(I2C_Master_Port, &conf);
+
+    return i2c_driver_install(I2C_Master_Port, conf.mode, 0 /* rxBuf */, 0 /* txBuf */, 0) == ESP_OK ? I2C_STATUS_SUCCESS : I2C_STATUS_ERROR;
   }
 
   /**
@@ -28,8 +39,10 @@
   * @retval uint8_t Read register value
   */
   uint8_t ESP32_I2C_IF::ReadRegister(uint8_t slaveAddress, uint8_t regAddress, i2c_status_t *status) {
-      /* TODO: implement */
-      return 1;
+    uint8_t data = 0;
+    esp_err_t error = i2c_master_write_read_device(I2C_Master_Port, slaveAddress, &regAddress, 1, &data, 1, I2C_Timeout_ms / portTICK_RATE_MS);
+    *status = error == ESP_OK ? I2C_STATUS_SUCCESS : I2C_STATUS_ERROR;
+    return data;
   }
 
   /**
@@ -41,8 +54,11 @@
   * @retval i2c_status_t
   */
   i2c_status_t ESP32_I2C_IF::WriteRegister(uint8_t slaveAddress, uint8_t regAddress, uint8_t data) {
-      /* TODO: implement */
-      return I2C_STATUS_NONE;
+    uint8_t write_buf[2] = {regAddress, data};
+    esp_err_t error = i2c_master_write_to_device(I2C_Master_Port, slaveAddress, write_buf, sizeof(write_buf), I2C_Timeout_ms / portTICK_RATE_MS);
+
+    /* TODO: implement */
+    return error == ESP_OK ? I2C_STATUS_SUCCESS : I2C_STATUS_ERROR;
   }
 
   /**
@@ -51,5 +67,5 @@
   * @retval none
   */  
   ESP32_I2C_IF::~ESP32_I2C_IF() {
-      /* TODO: implement if needed */
+      i2c_driver_delete(I2C_Master_Port);
   }
