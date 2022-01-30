@@ -4,6 +4,7 @@
   * @author  Ali Batuhan KINDAN
   * @date    24.01.2022
   * @brief   Example application for ESP32-Wroom to show MPU6050 driver features.
+  *          IDF version used: ESP-IDF v5.0-dev-1295-gfaf0f61cdb
   ******************************************************************************
   */
 #include <stdio.h>
