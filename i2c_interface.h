@@ -20,6 +20,15 @@ enum i2c_status_t
   I2C_STATUS_NONE = 0x02
 };
 
+/* I2C clock speed types */
+enum i2c_clockspeed_t
+{
+  I2C_CLOCK_NONE = 0,
+  I2C_CLOCK_100KHz = 100000,
+  I2C_CLOCK_200KHz = 200000,
+  I2C_CLOCK_400KHz = 400000
+};
+
 /* I2C Interface class to make sensor driver work with
  * other MCU architectures by simply overriding this virtual
  * methods according to current architecture I2C driver methods. */
@@ -44,10 +53,10 @@ public:
 
   /**
   * @brief  I2C peripheral initialization method.
-  * @param  baudrate I2C clock frequency (default 100 kHz)
+  * @param  clock I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  virtual i2c_status_t Init_I2C(uint32_t baudrate = 100000) {return I2C_STATUS_NONE;};
+  virtual i2c_status_t Init_I2C(i2c_clockspeed_t clock = I2C_CLOCK_100KHz) {return I2C_STATUS_NONE;};
 
   /**
   * @brief  I2C peripheral initialization method.

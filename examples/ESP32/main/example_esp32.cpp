@@ -33,7 +33,7 @@ extern "C" void app_main(void)
 
   I2C_Interface *i2c_if = new ESP32_I2C_IF();
   /* initialize fast I2C 400 kHz */
-  if (i2c_if->Init_I2C((uint32_t)400000) != I2C_STATUS_SUCCESS) {
+  if (i2c_if->Init_I2C(I2C_CLOCK_400KHz) != I2C_STATUS_SUCCESS) {
     printf("I2C initialization failed!\n");
     delete i2c_if;
     esp_restart();

@@ -12,17 +12,17 @@
 
   /**
   * @brief  I2C peripheral initialization method.
-  * @param  baudrate I2C clock frequency (default 100 kHz)
+  * @param  clock I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  i2c_status_t ESP32_I2C_IF::Init_I2C(uint32_t baudrate) {
+  i2c_status_t ESP32_I2C_IF::Init_I2C(i2c_clockspeed_t clock) {
     i2c_config_t conf;
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = 21;
     conf.scl_io_num = 22;
     conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
     conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.master.clk_speed = baudrate;
+    conf.master.clk_speed = clock;
     conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
 
     i2c_param_config(I2C_Master_Port, &conf);
