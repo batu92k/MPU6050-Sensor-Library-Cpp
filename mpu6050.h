@@ -134,7 +134,8 @@ enum dlpf_config_t
   DLPF_BW_44Hz = 3,
   DLPF_BW_21Hz = 4,
   DLPF_BW_10Hz = 5,
-  DLPF_BW_5Hz = 6
+  DLPF_BW_5Hz = 6,
+  DLPF_RESERVED = 7
 };
 
 class MPU6050 
@@ -437,6 +438,14 @@ public:
   * @retval dlpf_config_t
   */
   dlpf_config_t GetSensor_DLPF_Config(i2c_status_t* error);
+
+  /**
+  * @brief This function gets the current sensor sample rate. In order to do this, method
+  *        reads Sample Rate Divider (0x19) and DLPF Config (0x1A) registers.
+  * @param error Result of the operation
+  * @retval float Current sample rate in Hz
+  */
+  float GetSensor_CurrentSampleRate_Hz (i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;

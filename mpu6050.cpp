@@ -856,3 +856,24 @@ dlpf_config_t MPU6050::GetSensor_DLPF_Config(i2c_status_t *error)
   /* get only the first 3 bit of the register */
   return (dlpf_config_t) (i2c->ReadRegister(MPU6050_ADDRESS, REG_CONFIG, error) & 0x07);
 }
+
+/**
+  * @brief This function gets the current sensor sample rate. In order to do this, method
+  *        reads Sample Rate Divider (0x19) and DLPF Config (0x1A) registers.
+  * @param error Result of the operation
+  * @retval float Current sample rate in Hz
+  */
+float MPU6050::GetSensor_CurrentSampleRate_Hz(i2c_status_t *error)
+{
+  uint8_t sampleRateDivider = GetGyro_SampleRateDivider(error);
+  if(*error != I2C_STATUS_SUCCESS)
+    return 0x00;
+
+  dlpf_config_t dlpfConfig = GetSensor_DLPF_Config(error);
+  if(*error != I2C_STATUS_SUCCESS)
+    return 0x00;
+  
+  /* if dlpf config is disabled (0 or 7) then sample rate is 8 kHz otherwise 1 kHz */
+  const float gyroDefaultOutRateHz = 1000 * (8 * (dlpfConfig == DLPF_BW_260Hz || dlpfConfig == DLPF_RESERVED));
+  return gyroDefaultOutRateHz / (1 + sampleRateDivider);
+}
