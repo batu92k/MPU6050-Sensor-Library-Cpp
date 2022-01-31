@@ -832,3 +832,27 @@ uint8_t MPU6050::GetGyro_SampleRateDivider(i2c_status_t *error)
 {
   return i2c->ReadRegister(MPU6050_ADDRESS, REG_SMPRT_DIV, error);
 }
+
+/**
+  * @brief This function sets the sensor digital low pass filter values. Tighter bandwitdh configs will
+  *        generate more delay on the sensor outputs (check sensor datasheet). Keep in mind that default
+  *        Gyroscope sample rate is 8 kHz but if we set DLPF config different than 0 it will be 1 kHz by default
+  *        unless if we make an extra configuration to Sample Rate Divider.
+  * @param dlpfConfig Digital low pass filter configuration value
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetSensor_DLPF_Config(dlpf_config_t dlpfConfig)
+{
+  return i2c->WriteRegister(MPU6050_ADDRESS, REG_CONFIG, (uint8_t)dlpfConfig);
+}
+
+/**
+  * @brief This function gets the current sensor digital low pass filter configuration.
+  * @param error Result of the operation
+  * @retval dlpf_config_t
+  */
+dlpf_config_t MPU6050::GetSensor_DLPF_Config(i2c_status_t *error)
+{
+  /* get only the first 3 bit of the register */
+  return (dlpf_config_t) (i2c->ReadRegister(MPU6050_ADDRESS, REG_CONFIG, error) & 0x07);
+}

@@ -66,7 +66,8 @@
 #define REG_ZA_OFFS_USR_H 0x0A
 #define REG_ZA_OFFS_USR_L 0x0B
 
-#define REG_SMPRT_DIV 0x19
+#define REG_SMPRT_DIV 0x19 // sample rate divider
+#define REG_CONFIG 0x1A // digital low passand extra sync configutation
 
 /* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
  * Check sensor datasheet for more info about the offset procedure! */
@@ -122,6 +123,18 @@ enum accel_full_scale_range_t
   ACCEL_SCALE_4G = 1,
   ACCEL_SCALE_8G = 2,
   ACCEL_SCALE_16G = 3
+};
+
+/* Digital low pass filter config bandwidth values in Hz*/
+enum dlpf_config_t 
+{
+  DLPF_BW_260Hz = 0,
+  DLPF_BW_184Hz = 1,
+  DLPF_BW_94Hz = 2,
+  DLPF_BW_44Hz = 3,
+  DLPF_BW_21Hz = 4,
+  DLPF_BW_10Hz = 5,
+  DLPF_BW_5Hz = 6
 };
 
 class MPU6050 
@@ -407,6 +420,23 @@ public:
   * @retval uint8_t
   */
   uint8_t GetGyro_SampleRateDivider(i2c_status_t* error);
+
+  /**
+  * @brief This function sets the sensor digital low pass filter values. Tighter bandwitdh configs will
+  *        generate more delay on the sensor outputs (check sensor datasheet). Keep in mind that default
+  *        Gyroscope sample rate is 8 kHz but if we set DLPF config different than 0 it will be 1 kHz by default
+  *        unless if we make an extra configuration to Sample Rate Divider.
+  * @param dlpfConfig Digital low pass filter configuration value
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetSensor_DLPF_Config(dlpf_config_t dlpfConfig);
+
+  /**
+  * @brief This function gets the current sensor digital low pass filter configuration.
+  * @param error Result of the operation
+  * @retval dlpf_config_t
+  */
+  dlpf_config_t GetSensor_DLPF_Config(i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;
