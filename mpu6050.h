@@ -66,6 +66,8 @@
 #define REG_ZA_OFFS_USR_H 0x0A
 #define REG_ZA_OFFS_USR_L 0x0B
 
+#define REG_SMPRT_DIV 0x19
+
 /* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
  * Check sensor datasheet for more info about the offset procedure! */
 #define GYRO_OFFSET_1DPS 32.8f
@@ -384,6 +386,27 @@ public:
   * @retval float
   */
   float GetAccel_MG_Constant(accel_full_scale_range_t accelRange);
+
+  /**
+  * @brief This function sets the gyroscope sample rate divider. Once the sample rate divider set, actual sample rate
+  *        can be found with this formula:
+  *        Actual sample rate = Gyroscope Output Rate / (1 + sampleRate)
+  *        Keep in mind that Gyroscope Output Rate = 8kHz when the DLPF (digital low pass filter) is disabled
+  *        (DLPF_CFG = 0 or 7), and 1kHz when the DLPF is enabled. Accel sample rate is constantly 1 kHz.
+  * @param sampleRate Gyroscope sample rate divider.     
+  * @retval i2c_status_t
+  */
+  i2c_status_t SetGyro_SampleRateDivider(uint8_t sampleRate);
+
+  /**
+  * @brief This function gets the gyroscope sample rate divider.
+  *        Actual sample rate = Gyroscope Output Rate / (1 + sampleRate)
+  *        Keep in mind that Gyroscope Output Rate = 8kHz when the DLPF (digital low pass filter) is disabled
+  *        (DLPF_CFG = 0 or 7), and 1kHz when the DLPF is enabled. Accel sample rate is constantly 1 kHz.
+  * @param error Result of the operation
+  * @retval uint8_t
+  */
+  uint8_t GetGyro_SampleRateDivider(i2c_status_t* error);
 
 private:
   I2C_Interface* i2c = nullptr;

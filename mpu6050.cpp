@@ -805,3 +805,30 @@ float MPU6050::GetAccel_MG_Constant(accel_full_scale_range_t accelRange)
 {
   return mgCostantArr[accelRange];
 }
+
+/**
+  * @brief This function sets the gyroscope sample rate divider. Once the sample rate divider set, actual sample rate
+  *        can be found with this formula:
+  *        Actual sample rate = Gyroscope Output Rate / (1 + sampleRate)
+  *        Keep in mind that Gyroscope Output Rate = 8kHz when the DLPF (digital low pass filter) is disabled
+  *        (DLPF_CFG = 0 or 7), and 1kHz when the DLPF is enabled. Accel sample rate is constantly 1 kHz.
+  * @param sampleRate Gyroscope sample rate divider value
+  * @retval i2c_status_t
+  */
+i2c_status_t MPU6050::SetGyro_SampleRateDivider(uint8_t sampleRate)
+{
+  return i2c->WriteRegister(MPU6050_ADDRESS, REG_SMPRT_DIV, sampleRate);
+}
+
+/**
+  * @brief This function gets the gyroscope sample rate divider.
+  *        Actual sample rate = Gyroscope Output Rate / (1 + sampleRate)
+  *        Keep in mind that Gyroscope Output Rate = 8kHz when the DLPF (digital low pass filter) is disabled
+  *        (DLPF_CFG = 0 or 7), and 1kHz when the DLPF is enabled. Accel sample rate is constantly 1 kHz.
+  * @param error Result of the operation
+  * @retval uint8_t
+  */
+uint8_t MPU6050::GetGyro_SampleRateDivider(i2c_status_t *error)
+{
+  return i2c->ReadRegister(MPU6050_ADDRESS, REG_SMPRT_DIV, error);
+}
