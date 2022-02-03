@@ -843,7 +843,15 @@ uint8_t MPU6050::GetGyro_SampleRateDivider(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetSensor_DLPF_Config(dlpf_config_t dlpfConfig)
 {
-  return i2c->WriteRegister(MPU6050_ADDRESS, REG_CONFIG, (uint8_t)dlpfConfig);
+  i2c_status_t error = I2C_STATUS_NONE;
+  /* This register also have EXT_SYNC config, so only set the DLPF part! */
+  uint8_t currentRegVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_CONFIG, &error);
+  if (error == I2C_STATUS_SUCCESS) {
+    currentRegVal &= (~0x07); // clear the DLPF section from the current register value
+    error = i2c->WriteRegister(MPU6050_ADDRESS, REG_CONFIG, (uint8_t)dlpfConfig | currentRegVal);
+  }
+  
+  return error;
 }
 
 /**
@@ -874,6 +882,6 @@ float MPU6050::GetSensor_CurrentSampleRate_Hz(i2c_status_t *error)
     return 0x00;
   
   /* if dlpf config is disabled (0 or 7) then sample rate is 8 kHz otherwise 1 kHz */
-  const float gyroDefaultOutRateHz = 1000 * (8 * (dlpfConfig == DLPF_BW_260Hz || dlpfConfig == DLPF_RESERVED));
+  const float gyroDefaultOutRateHz = (dlpfConfig == DLPF_BW_260Hz || dlpfConfig == DLPF_RESERVED) ? 8000 : 1000;
   return gyroDefaultOutRateHz / (1 + sampleRateDivider);
 }
