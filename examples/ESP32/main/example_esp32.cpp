@@ -71,6 +71,28 @@ extern "C" void app_main(void)
     esp_restart();
   }
 
+  /* set digital low pass to default value 
+   * (just to show the feature it already has default value in startup) */
+  if(sensor.SetSensor_DLPF_Config(DLPF_BW_260Hz) != I2C_STATUS_SUCCESS) {
+    printf("DLPF configuration failed!\n");
+    esp_restart();  
+  }
+
+  /* set sample rate divider to default value 
+   * (just to show the feature it already has default value in startup) */
+  i2c_status_t error = I2C_STATUS_NONE;
+  if(sensor.SetGyro_SampleRateDivider(0) != I2C_STATUS_SUCCESS) {
+    printf("Sample rate config failed!\n");
+    esp_restart();  
+  }
+
+  float currentSampleRateHz = sensor.GetSensor_CurrentSampleRate_Hz(&error);
+  if(error != I2C_STATUS_SUCCESS) {
+    printf("Sample rate reading failed!\n");
+    esp_restart();  
+  }
+
+  printf("Sensor sample rate: %.2f Hz \n", currentSampleRateHz);
   printf("Sensor configuration completed!\n");
 
   /* Read sensor conversion registers for test! */

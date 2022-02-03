@@ -8,6 +8,7 @@
   */
 #include <thread> // std::this_thread::sleep_for
 #include <chrono> // std::chrono::milliseconds
+#include <iomanip> // std::setprecision
 #include <iostream>
 #include "mpu6050.h"
 #include "bcm2835_i2c_if.h"
@@ -55,6 +56,29 @@ int main()
     return EXIT_FAILURE;
   }
 
+  /* set digital low pass to default value 
+   * (just to show the feature it already has default value in startup) */
+  if(sensor.SetSensor_DLPF_Config(DLPF_BW_260Hz) != I2C_STATUS_SUCCESS) {
+    std::cout << "DLPF configuration failed!\n";
+    return EXIT_FAILURE;
+  }
+
+  /* set sample rate divider to default value 
+   * (just to show the feature it already has default value in startup) */
+  i2c_status_t error = I2C_STATUS_NONE;
+  if(sensor.SetGyro_SampleRateDivider(0) != I2C_STATUS_SUCCESS) {
+    std::cout << "Sample rate config failed!\n";
+    return EXIT_FAILURE;
+  }
+
+  float currentSampleRateHz = sensor.GetSensor_CurrentSampleRate_Hz(&error);
+  if(error != I2C_STATUS_SUCCESS) {
+    std::cout << "Sample rate reading failed!\n";
+    return EXIT_FAILURE; 
+  }
+
+  std::cout << std::fixed;
+  std::cout << "Sensor sample rate: " << std::setprecision(2) << currentSampleRateHz << " Hz\n";
   std::cout << "Sensor configuration completed!\n";
 
   /* Read sensor conversion registers for test! */
