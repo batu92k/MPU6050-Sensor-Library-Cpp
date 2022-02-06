@@ -26,48 +26,49 @@
 #define MPU6050_ADDRESS MPU6050_ADDRESS_AD1
 #endif
 
-#define REG_PWR_MGMT_1 0x6B
-#define REG_GYRO_CONFIG 0x1B
-#define REG_ACCEL_CONFIG 0x1C
+/* define sensor register type here to write it easily */
+typedef const uint8_t REGType;
+#define REG static REGType
 
-/* Accelerometer read registers */
-#define REG_ACCEL_X_OUT_H 0x3B
-#define REG_ACCEL_X_OUT_L 0x3C
-#define REG_ACCEL_Y_OUT_H 0x3D
-#define REG_ACCEL_Y_OUT_L 0x3E
-#define REG_ACCEL_Z_OUT_H 0x3F
-#define REG_ACCEL_Z_OUT_L 0x40
+struct MPU6050_Regs {
+  REG PWR_MGMT_1 = 0x6B;
+  REG GYRO_CONFIG = 0x1B;
+  REG ACCEL_CONFIG = 0x1C;
+  /* Accelerometer read registers */
+  REG ACCEL_X_OUT_L = 0x3C;
+  REG ACCEL_X_OUT_H = 0x3B;
+  REG ACCEL_Y_OUT_H = 0x3D;
+  REG ACCEL_Y_OUT_L = 0x3E;
+  REG ACCEL_Z_OUT_H = 0x3F;
+  REG ACCEL_Z_OUT_L = 0x40;
+  /* Temperature read registers */
+  REG TEMP_OUT_H = 0x41;
+  REG TEMP_OUT_L = 0x42;
+  /* Gyroscope read registers */
+  REG GYRO_X_OUT_H = 0x43;
+  REG GYRO_X_OUT_L = 0x44;
+  REG GYRO_Y_OUT_H = 0x45;
+  REG GYRO_Y_OUT_L = 0x46;
+  REG GYRO_Z_OUT_H = 0x47;
+  REG GYRO_Z_OUT_L = 0x48;
+  /* Gyroscope offset registers */
+  REG XG_OFFS_USR_H = 0x13;
+  REG XG_OFFS_USR_L = 0x14;
+  REG YG_OFFS_USR_H = 0x15;
+  REG YG_OFFS_USR_L = 0x16;
+  REG ZG_OFFS_USR_H = 0x17;
+  REG ZG_OFFS_USR_L = 0x18;
+  /* Accellerometer offset registers */
+  REG XA_OFFS_USR_H = 0x06;
+  REG XA_OFFS_USR_L = 0x07;
+  REG YA_OFFS_USR_H = 0x08;
+  REG YA_OFFS_USR_L = 0x09;
+  REG ZA_OFFS_USR_H = 0x0A;
+  REG ZA_OFFS_USR_L = 0x0B;
 
-/* Temperature read registers */
-#define REG_TEMP_OUT_H 0x41
-#define REG_TEMP_OUT_L 0x42
-
-/* Gyroscope read registers */
-#define REG_GYRO_X_OUT_H 0x43
-#define REG_GYRO_X_OUT_L 0x44
-#define REG_GYRO_Y_OUT_H 0x45
-#define REG_GYRO_Y_OUT_L 0x46
-#define REG_GYRO_Z_OUT_H 0x47
-#define REG_GYRO_Z_OUT_L 0x48
-
-/* Gyroscope offset registers */
-#define REG_XG_OFFS_USR_H 0x13
-#define REG_XG_OFFS_USR_L 0x14
-#define REG_YG_OFFS_USR_H 0x15
-#define REG_YG_OFFS_USR_L 0x16
-#define REG_ZG_OFFS_USR_H 0x17
-#define REG_ZG_OFFS_USR_L 0x18
-
-/* Accellerometer offset registers */
-#define REG_XA_OFFS_USR_H 0x06
-#define REG_XA_OFFS_USR_L 0x07
-#define REG_YA_OFFS_USR_H 0x08
-#define REG_YA_OFFS_USR_L 0x09
-#define REG_ZA_OFFS_USR_H 0x0A
-#define REG_ZA_OFFS_USR_L 0x0B
-
-#define REG_SMPRT_DIV 0x19 // sample rate divider
-#define REG_CONFIG 0x1A // digital low passand extra sync configutation
+  REG SMPRT_DIV = 0x19; // sample rate divider
+  REG CONFIG = 0x1A;    // digital low passand extra sync configutation
+};
 
 /* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
  * Check sensor datasheet for more info about the offset procedure! */

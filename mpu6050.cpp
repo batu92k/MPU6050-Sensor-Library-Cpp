@@ -46,7 +46,7 @@ i2c_status_t MPU6050::InitializeSensor(
 }
 
 /**
-  * @brief  This method wakes the sensor up by cleraing the REG_PWR_MGMT_1
+  * @brief  This method wakes the sensor up by cleraing the MPU6050_Regs::PWR_MGMT_1
   * BIT_SLEEP. Power management 1 sensors default values is 0x40 so it will
   * be in sleep mode when it's powered up.
   * @param  none
@@ -54,11 +54,11 @@ i2c_status_t MPU6050::InitializeSensor(
   */
 i2c_status_t MPU6050::WakeUpSensor(void)
 {
-  return i2c->WriteRegisterBit(MPU6050_ADDRESS, REG_PWR_MGMT_1, BIT_SLEEP, false);
+  return i2c->WriteRegisterBit(MPU6050_ADDRESS, MPU6050_Regs::PWR_MGMT_1, BIT_SLEEP, false);
 }
 
 /**
-  * @brief  This method resets the sensor by simply setting the REG_PWR_MGMT_1
+  * @brief  This method resets the sensor by simply setting the MPU6050_Regs::PWR_MGMT_1
   * Device_Reset bit. After the sensor reset this bit will be cleared automatically.
   * TODO: Can be modify later to check the Device_Reset bit is clear after the reset
   * in order to make it safer (for this we probably need an interface for platform
@@ -68,7 +68,7 @@ i2c_status_t MPU6050::WakeUpSensor(void)
   */
 i2c_status_t MPU6050::ResetSensor(void)
 {
-  return i2c->WriteRegisterBit(MPU6050_ADDRESS, REG_PWR_MGMT_1, BIT_DEVICE_RESET, true);
+  return i2c->WriteRegisterBit(MPU6050_ADDRESS, MPU6050_Regs::PWR_MGMT_1, BIT_DEVICE_RESET, true);
 }
 
 /**
@@ -79,7 +79,7 @@ i2c_status_t MPU6050::ResetSensor(void)
   */
 i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
 {
-  return i2c->WriteRegister(MPU6050_ADDRESS, REG_GYRO_CONFIG, ((uint8_t)gyroScale << 3));
+  return i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_CONFIG, ((uint8_t)gyroScale << 3));
 }
 
 /**
@@ -91,7 +91,7 @@ i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
   */
 gyro_full_scale_range_t MPU6050::GetGyroFullScale(i2c_status_t *error)
 {
-  uint8_t gyroConfig = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_CONFIG, error);
+  uint8_t gyroConfig = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_CONFIG, error);
   return (gyro_full_scale_range_t)((gyroConfig >> 3) & 0x03);
 }
 
@@ -104,10 +104,10 @@ gyro_full_scale_range_t MPU6050::GetGyroFullScale(i2c_status_t *error)
   */
 int16_t MPU6050::GetGyro_X_Raw(i2c_status_t *error)
 {
-  int16_t gyroXVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_X_OUT_H, error); // higher 8 bits
+  int16_t gyroXVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_X_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    gyroXVal = (gyroXVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_X_OUT_L, error); // assemble higher and lower bytes
+    gyroXVal = (gyroXVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_X_OUT_L, error); // assemble higher and lower bytes
     return gyroXVal;
   }
 
@@ -123,10 +123,10 @@ int16_t MPU6050::GetGyro_X_Raw(i2c_status_t *error)
   */
 int16_t MPU6050::GetGyro_Y_Raw(i2c_status_t *error)
 {
-  int16_t gyroYVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Y_OUT_H, error); // higher 8 bits
+  int16_t gyroYVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_Y_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    gyroYVal = (gyroYVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Y_OUT_L, error); // assemble higher and lower bytes
+    gyroYVal = (gyroYVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_Y_OUT_L, error); // assemble higher and lower bytes
     return gyroYVal;
   }
 
@@ -142,10 +142,10 @@ int16_t MPU6050::GetGyro_Y_Raw(i2c_status_t *error)
   */
 int16_t MPU6050::GetGyro_Z_Raw(i2c_status_t *error)
 {
-  int16_t gyroZVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Z_OUT_H, error); // higher 8 bits
+  int16_t gyroZVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_Z_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    gyroZVal = (gyroZVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_GYRO_Z_OUT_L, error); // assemble higher and lower bytes
+    gyroZVal = (gyroZVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_Z_OUT_L, error); // assemble higher and lower bytes
     return gyroZVal;
   }
 
@@ -160,7 +160,7 @@ int16_t MPU6050::GetGyro_Z_Raw(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
 {
-  return i2c->WriteRegister(MPU6050_ADDRESS, REG_ACCEL_CONFIG, ((uint8_t)accelScale << 3));
+  return i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_CONFIG, ((uint8_t)accelScale << 3));
 }
 
 /**
@@ -172,7 +172,7 @@ i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
   */
 accel_full_scale_range_t MPU6050::GetAccelFullScale(i2c_status_t *error)
 {
-  uint8_t accelConfig = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_CONFIG, error);
+  uint8_t accelConfig = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_CONFIG, error);
   return (accel_full_scale_range_t)((accelConfig >> 3) & 0x03);  
 }
 
@@ -185,10 +185,10 @@ accel_full_scale_range_t MPU6050::GetAccelFullScale(i2c_status_t *error)
   */
 int16_t MPU6050::GetAccel_X_Raw(i2c_status_t *error)
 {
-  int16_t accelXVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_X_OUT_H, error); // higher 8 bits
+  int16_t accelXVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_X_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    accelXVal = (accelXVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_X_OUT_L, error); // assemble higher and lower bytes
+    accelXVal = (accelXVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_X_OUT_L, error); // assemble higher and lower bytes
     return accelXVal;
   }
 
@@ -204,10 +204,10 @@ int16_t MPU6050::GetAccel_X_Raw(i2c_status_t *error)
   */
 int16_t MPU6050::GetAccel_Y_Raw(i2c_status_t *error)
 {
-  int16_t accelYVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_Y_OUT_H, error); // higher 8 bits
+  int16_t accelYVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_Y_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    accelYVal = (accelYVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_Y_OUT_L, error); // assemble higher and lower bytes
+    accelYVal = (accelYVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_Y_OUT_L, error); // assemble higher and lower bytes
     return accelYVal;
   }
 
@@ -223,10 +223,10 @@ int16_t MPU6050::GetAccel_Y_Raw(i2c_status_t *error)
   */
 int16_t MPU6050::GetAccel_Z_Raw(i2c_status_t *error)
 {
-  int16_t accelZVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_Z_OUT_H, error); // higher 8 bits
+  int16_t accelZVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_Z_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    accelZVal = (accelZVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, REG_ACCEL_Z_OUT_L, error); // assemble higher and lower bytes
+    accelZVal = (accelZVal << 8) | i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_Z_OUT_L, error); // assemble higher and lower bytes
     return accelZVal;
   }
 
@@ -241,10 +241,10 @@ int16_t MPU6050::GetAccel_Z_Raw(i2c_status_t *error)
   */
 float MPU6050::GetTemperature_Celcius(i2c_status_t *error)
 {
-  int16_t sensorTemp = i2c->ReadRegister(MPU6050_ADDRESS, REG_TEMP_OUT_H, error); // higher 8 bits
+  int16_t sensorTemp = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::TEMP_OUT_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    sensorTemp = (sensorTemp << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_TEMP_OUT_L, error); // assemble higher and lower bytes
+    sensorTemp = (sensorTemp << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::TEMP_OUT_L, error); // assemble higher and lower bytes
     return (sensorTemp / 340.0 + 36.53f);
   }
 
@@ -259,10 +259,10 @@ float MPU6050::GetTemperature_Celcius(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetGyro_X_Offset(int16_t offset)
 {
-  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XG_OFFS_USR_H, (offset >> 8));
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::XG_OFFS_USR_H, (offset >> 8));
   if(result == I2C_STATUS_SUCCESS)
   {
-    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XG_OFFS_USR_L, (offset & 0x00FF));
+    result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::XG_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;
 }
@@ -274,10 +274,10 @@ i2c_status_t MPU6050::SetGyro_X_Offset(int16_t offset)
   */
 int16_t MPU6050::GetGyro_X_Offset(i2c_status_t *error)
 {
-  int16_t gyroXOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_XG_OFFS_USR_H, error); // higher 8 bits
+  int16_t gyroXOffset = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::XG_OFFS_USR_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    gyroXOffset = (gyroXOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_XG_OFFS_USR_L, error); // assemble higher and lower bytes
+    gyroXOffset = (gyroXOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::XG_OFFS_USR_L, error); // assemble higher and lower bytes
     return gyroXOffset;
   }
 
@@ -292,10 +292,10 @@ int16_t MPU6050::GetGyro_X_Offset(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetGyro_Y_Offset(int16_t offset)
 {
-  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YG_OFFS_USR_H, (offset >> 8));
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::YG_OFFS_USR_H, (offset >> 8));
   if(result == I2C_STATUS_SUCCESS)
   {
-    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YG_OFFS_USR_L, (offset & 0x00FF));
+    result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::YG_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;
 }
@@ -307,10 +307,10 @@ i2c_status_t MPU6050::SetGyro_Y_Offset(int16_t offset)
   */
 int16_t MPU6050::GetGyro_Y_Offset(i2c_status_t *error)
 {
-  int16_t gyroYOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_YG_OFFS_USR_H, error); // higher 8 bits
+  int16_t gyroYOffset = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::YG_OFFS_USR_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    gyroYOffset = (gyroYOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_YG_OFFS_USR_L, error); // assemble higher and lower bytes
+    gyroYOffset = (gyroYOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::YG_OFFS_USR_L, error); // assemble higher and lower bytes
     return gyroYOffset;
   }
 
@@ -325,10 +325,10 @@ int16_t MPU6050::GetGyro_Y_Offset(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetGyro_Z_Offset(int16_t offset)
 {
-  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZG_OFFS_USR_H, (offset >> 8));
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::ZG_OFFS_USR_H, (offset >> 8));
   if(result == I2C_STATUS_SUCCESS)
   {
-    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZG_OFFS_USR_L, (offset & 0x00FF));
+    result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::ZG_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;
 }
@@ -340,10 +340,10 @@ i2c_status_t MPU6050::SetGyro_Z_Offset(int16_t offset)
   */
 int16_t MPU6050::GetGyro_Z_Offset(i2c_status_t *error)
 {
-  int16_t gyroZOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_ZG_OFFS_USR_H, error); // higher 8 bits
+  int16_t gyroZOffset = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ZG_OFFS_USR_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    gyroZOffset = (gyroZOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_ZG_OFFS_USR_L, error); // assemble higher and lower bytes
+    gyroZOffset = (gyroZOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ZG_OFFS_USR_L, error); // assemble higher and lower bytes
     return gyroZOffset;
   }
 
@@ -451,10 +451,10 @@ float MPU6050::GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange)
   */
 i2c_status_t MPU6050::SetAccel_X_Offset(int16_t offset)
 {
-  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_H, (offset >> 8));
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::XA_OFFS_USR_H, (offset >> 8));
   if(result == I2C_STATUS_SUCCESS)
   {
-    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_L, (offset & 0x00FF));
+    result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::XA_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;   
 }
@@ -466,10 +466,10 @@ i2c_status_t MPU6050::SetAccel_X_Offset(int16_t offset)
   */
 int16_t MPU6050::GetAccel_X_Offset(i2c_status_t *error)
 {
-  int16_t accelXOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_H, error); // higher 8 bits
+  int16_t accelXOffset = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::XA_OFFS_USR_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    accelXOffset = (accelXOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_XA_OFFS_USR_L, error); // assemble higher and lower bytes
+    accelXOffset = (accelXOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::XA_OFFS_USR_L, error); // assemble higher and lower bytes
     return accelXOffset;
   }
 
@@ -484,10 +484,10 @@ int16_t MPU6050::GetAccel_X_Offset(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetAccel_Y_Offset(int16_t offset)
 {
-  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_H, (offset >> 8));
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::YA_OFFS_USR_H, (offset >> 8));
   if(result == I2C_STATUS_SUCCESS)
   {
-    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_L, (offset & 0x00FF));
+    result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::YA_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;  
 }
@@ -499,10 +499,10 @@ i2c_status_t MPU6050::SetAccel_Y_Offset(int16_t offset)
   */
 int16_t MPU6050::GetAccel_Y_Offset(i2c_status_t *error)
 {
-  int16_t accelYOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_H, error); // higher 8 bits
+  int16_t accelYOffset = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::YA_OFFS_USR_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    accelYOffset = (accelYOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_YA_OFFS_USR_L, error); // assemble higher and lower bytes
+    accelYOffset = (accelYOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::YA_OFFS_USR_L, error); // assemble higher and lower bytes
     return accelYOffset;
   }
 
@@ -517,10 +517,10 @@ int16_t MPU6050::GetAccel_Y_Offset(i2c_status_t *error)
   */
 i2c_status_t MPU6050::SetAccel_Z_Offset(int16_t offset)
 {
-  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_H, (offset >> 8));
+  i2c_status_t result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::ZA_OFFS_USR_H, (offset >> 8));
   if(result == I2C_STATUS_SUCCESS)
   {
-    result = i2c->WriteRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_L, (offset & 0x00FF));
+    result = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::ZA_OFFS_USR_L, (offset & 0x00FF));
   }
   return result;  
 }
@@ -532,10 +532,10 @@ i2c_status_t MPU6050::SetAccel_Z_Offset(int16_t offset)
   */
 int16_t MPU6050::GetAccel_Z_Offset(i2c_status_t *error)
 {
-  int16_t accelZOffset = i2c->ReadRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_H, error); // higher 8 bits
+  int16_t accelZOffset = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ZA_OFFS_USR_H, error); // higher 8 bits
   if(*error == I2C_STATUS_SUCCESS)
   {
-    accelZOffset = (accelZOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, REG_ZA_OFFS_USR_L, error); // assemble higher and lower bytes
+    accelZOffset = (accelZOffset << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ZA_OFFS_USR_L, error); // assemble higher and lower bytes
     return accelZOffset;
   }
 
@@ -817,7 +817,7 @@ float MPU6050::GetAccel_MG_Constant(accel_full_scale_range_t accelRange)
   */
 i2c_status_t MPU6050::SetGyro_SampleRateDivider(uint8_t sampleRate)
 {
-  return i2c->WriteRegister(MPU6050_ADDRESS, REG_SMPRT_DIV, sampleRate);
+  return i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::SMPRT_DIV, sampleRate);
 }
 
 /**
@@ -830,7 +830,7 @@ i2c_status_t MPU6050::SetGyro_SampleRateDivider(uint8_t sampleRate)
   */
 uint8_t MPU6050::GetGyro_SampleRateDivider(i2c_status_t *error)
 {
-  return i2c->ReadRegister(MPU6050_ADDRESS, REG_SMPRT_DIV, error);
+  return i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::SMPRT_DIV, error);
 }
 
 /**
@@ -845,10 +845,10 @@ i2c_status_t MPU6050::SetSensor_DLPF_Config(dlpf_config_t dlpfConfig)
 {
   i2c_status_t error = I2C_STATUS_NONE;
   /* This register also have EXT_SYNC config, so only set the DLPF part! */
-  uint8_t currentRegVal = i2c->ReadRegister(MPU6050_ADDRESS, REG_CONFIG, &error);
+  uint8_t currentRegVal = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::CONFIG, &error);
   if (error == I2C_STATUS_SUCCESS) {
     currentRegVal &= (~0x07); // clear the DLPF section from the current register value
-    error = i2c->WriteRegister(MPU6050_ADDRESS, REG_CONFIG, (uint8_t)dlpfConfig | currentRegVal);
+    error = i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::CONFIG, (uint8_t)dlpfConfig | currentRegVal);
   }
   
   return error;
@@ -862,7 +862,7 @@ i2c_status_t MPU6050::SetSensor_DLPF_Config(dlpf_config_t dlpfConfig)
 dlpf_config_t MPU6050::GetSensor_DLPF_Config(i2c_status_t *error)
 {
   /* get only the first 3 bit of the register */
-  return (dlpf_config_t) (i2c->ReadRegister(MPU6050_ADDRESS, REG_CONFIG, error) & 0x07);
+  return (dlpf_config_t) (i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::CONFIG, error) & 0x07);
 }
 
 /**
