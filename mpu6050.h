@@ -27,85 +27,57 @@
 #endif
 
 /* define sensor register type here to write it easily */
-typedef const uint8_t REGType;
-#define REG static REGType
+typedef const uint8_t SensorConstType;
+#define SensorConst static SensorConstType
 
 struct MPU6050_Regs {
-  REG PWR_MGMT_1 = 0x6B;
-  REG GYRO_CONFIG = 0x1B;
-  REG ACCEL_CONFIG = 0x1C;
+  SensorConst PWR_MGMT_1 = 0x6B;
+  SensorConst GYRO_CONFIG = 0x1B;
+  SensorConst ACCEL_CONFIG = 0x1C;
   /* Accelerometer read registers */
-  REG ACCEL_X_OUT_L = 0x3C;
-  REG ACCEL_X_OUT_H = 0x3B;
-  REG ACCEL_Y_OUT_H = 0x3D;
-  REG ACCEL_Y_OUT_L = 0x3E;
-  REG ACCEL_Z_OUT_H = 0x3F;
-  REG ACCEL_Z_OUT_L = 0x40;
-  /* Temperature read registers */
-  REG TEMP_OUT_H = 0x41;
-  REG TEMP_OUT_L = 0x42;
-  /* Gyroscope read registers */
-  REG GYRO_X_OUT_H = 0x43;
-  REG GYRO_X_OUT_L = 0x44;
-  REG GYRO_Y_OUT_H = 0x45;
-  REG GYRO_Y_OUT_L = 0x46;
-  REG GYRO_Z_OUT_H = 0x47;
-  REG GYRO_Z_OUT_L = 0x48;
-  /* Gyroscope offset registers */
-  REG XG_OFFS_USR_H = 0x13;
-  REG XG_OFFS_USR_L = 0x14;
-  REG YG_OFFS_USR_H = 0x15;
-  REG YG_OFFS_USR_L = 0x16;
-  REG ZG_OFFS_USR_H = 0x17;
-  REG ZG_OFFS_USR_L = 0x18;
-  /* Accellerometer offset registers */
-  REG XA_OFFS_USR_H = 0x06;
-  REG XA_OFFS_USR_L = 0x07;
-  REG YA_OFFS_USR_H = 0x08;
-  REG YA_OFFS_USR_L = 0x09;
-  REG ZA_OFFS_USR_H = 0x0A;
-  REG ZA_OFFS_USR_L = 0x0B;
+  SensorConst ACCEL_X_OUT_L = 0x3C;
+  SensorConst ACCEL_X_OUT_H = 0x3B;
+  SensorConst ACCEL_Y_OUT_H = 0x3D;
+  SensorConst ACCEL_Y_OUT_L = 0x3E;
+  SensorConst ACCEL_Z_OUT_H = 0x3F;
+  SensorConst ACCEL_Z_OUT_L = 0x40;
+  /* Temperature read SensorConstisters */
+  SensorConst TEMP_OUT_H = 0x41;
+  SensorConst TEMP_OUT_L = 0x42;
+  /* Gyroscope read SensorConstisters */
+  SensorConst GYRO_X_OUT_H = 0x43;
+  SensorConst GYRO_X_OUT_L = 0x44;
+  SensorConst GYRO_Y_OUT_H = 0x45;
+  SensorConst GYRO_Y_OUT_L = 0x46;
+  SensorConst GYRO_Z_OUT_H = 0x47;
+  SensorConst GYRO_Z_OUT_L = 0x48;
+  /* Gyroscope offset SensorConstisters */
+  SensorConst XG_OFFS_USR_H = 0x13;
+  SensorConst XG_OFFS_USR_L = 0x14;
+  SensorConst YG_OFFS_USR_H = 0x15;
+  SensorConst YG_OFFS_USR_L = 0x16;
+  SensorConst ZG_OFFS_USR_H = 0x17;
+  SensorConst ZG_OFFS_USR_L = 0x18;
+  /* Accellerometer offset SensorConstisters */
+  SensorConst XA_OFFS_USR_H = 0x06;
+  SensorConst XA_OFFS_USR_L = 0x07;
+  SensorConst YA_OFFS_USR_H = 0x08;
+  SensorConst YA_OFFS_USR_L = 0x09;
+  SensorConst ZA_OFFS_USR_H = 0x0A;
+  SensorConst ZA_OFFS_USR_L = 0x0B;
 
-  REG SMPRT_DIV = 0x19; // sample rate divider
-  REG CONFIG = 0x1A;    // digital low passand extra sync configutation
+  SensorConst SMPRT_DIV = 0x19; // sample rate divider
+  SensorConst CONFIG = 0x1A;    // digital low passand extra sync configutation
 };
 
-/* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
- * Check sensor datasheet for more info about the offset procedure! */
-#define GYRO_OFFSET_1DPS 32.8f
-
-/* TODO: This value is not using currently. After some experiments and tests somehow
- * offset procedure didnt work as expected in the application notes. So another method
- * applied for auto-calibration, keep the value for future consideration!
- * Accel offset register constant to compensate 1 MG (Gravity - 9.81 m/s2) offset.
- * Check sensor datasheet for more info about the offset procedure! */
-#define ACCEL_OFFSET_1MG 4096.0f
-
-enum regbits_pwr_mgmt_1_t 
-{
-  BIT_CLKSEL_0 = 0,
-  BIT_CLKSEL_1 = 1,
-  BIT_CLKSEL_2 = 2,
-  BIT_TEMP_DIS = 3,
-  BIT_CYCLE = 5,
-  BIT_SLEEP = 6,
-  BIT_DEVICE_RESET = 7
-};
-
-enum regbits_gyro_config_t
-{
-  XG_ST = 7,
-  YG_ST = 6,
-  ZG_ST = 5
-  /* other bits related with gyro full scale config! */
-};
-
-enum regbits_accel_config_t
-{
-  XA_ST = 7,
-  YA_ST = 6,
-  ZA_ST = 5
-  /* other bits related with accelerometer full scale config! */
+struct MPU6050_Regbits_PWR_MGMT_1 {
+  SensorConst BIT_CLKSEL_0 = 0;
+  SensorConst BIT_CLKSEL_1 = 1;
+  SensorConst BIT_CLKSEL_2 = 2;
+  SensorConst BIT_TEMP_DIS = 3;
+  SensorConst BIT_CYCLE = 5;
+  SensorConst BIT_SLEEP = 6;
+  SensorConst BIT_DEVICE_RESET = 7;
 };
 
 /* Gyroscope full scale ranges in degrees per second */
@@ -460,6 +432,9 @@ private:
    * the MG value by "mgConstantArr[ACCEL_SCALE_2G]"" for ACCEL_SCALE_2G. */
   const float mgCostantArr[4] = {2.0f / 32767.0f, 4.0f / 32767.0f, 8.0f / 32767.0f, 16.0f / 32767.0f};
 
+  /* Gyro offset register constant to compensate 1 DPS (degree per second) offset.
+ * Check sensor datasheet for more info about the offset procedure! */
+  const float gyro_offset_1dps = 32.8f;
 };
 
 #endif /* include guard */

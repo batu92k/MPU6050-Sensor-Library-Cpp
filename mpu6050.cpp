@@ -54,7 +54,7 @@ i2c_status_t MPU6050::InitializeSensor(
   */
 i2c_status_t MPU6050::WakeUpSensor(void)
 {
-  return i2c->WriteRegisterBit(MPU6050_ADDRESS, MPU6050_Regs::PWR_MGMT_1, BIT_SLEEP, false);
+  return i2c->WriteRegisterBit(MPU6050_ADDRESS, MPU6050_Regs::PWR_MGMT_1, MPU6050_Regbits_PWR_MGMT_1::BIT_SLEEP, false);
 }
 
 /**
@@ -68,7 +68,7 @@ i2c_status_t MPU6050::WakeUpSensor(void)
   */
 i2c_status_t MPU6050::ResetSensor(void)
 {
-  return i2c->WriteRegisterBit(MPU6050_ADDRESS, MPU6050_Regs::PWR_MGMT_1, BIT_DEVICE_RESET, true);
+  return i2c->WriteRegisterBit(MPU6050_ADDRESS, MPU6050_Regs::PWR_MGMT_1, MPU6050_Regbits_PWR_MGMT_1::BIT_DEVICE_RESET, true);
 }
 
 /**
@@ -387,7 +387,7 @@ i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY,
   if(result != I2C_STATUS_SUCCESS)
     return result;
 
-  offsetVal = (int16_t)(((targetX - sumOfSamples) * dpsConstant) * GYRO_OFFSET_1DPS);
+  offsetVal = (int16_t)(((targetX - sumOfSamples) * dpsConstant) * gyro_offset_1dps);
   result = SetGyro_X_Offset(offsetVal);
 
   if(result != I2C_STATUS_SUCCESS)
@@ -406,7 +406,7 @@ i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY,
   if(result != I2C_STATUS_SUCCESS)
     return result;
 
-  offsetVal = (int16_t)(((targetY - sumOfSamples) * dpsConstant) * GYRO_OFFSET_1DPS);
+  offsetVal = (int16_t)(((targetY - sumOfSamples) * dpsConstant) * gyro_offset_1dps);
   result = SetGyro_Y_Offset(offsetVal);
 
   if(result != I2C_STATUS_SUCCESS)
@@ -425,7 +425,7 @@ i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY,
   if(result != I2C_STATUS_SUCCESS)
     return result;
 
-  offsetVal = (int16_t)(((targetZ - sumOfSamples) * dpsConstant) * GYRO_OFFSET_1DPS);
+  offsetVal = (int16_t)(((targetZ - sumOfSamples) * dpsConstant) * gyro_offset_1dps);
   result = SetGyro_Z_Offset(offsetVal);
 
   return result;
