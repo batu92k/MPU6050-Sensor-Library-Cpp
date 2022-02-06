@@ -81,34 +81,34 @@ struct MPU6050_Regbits_PWR_MGMT_1 {
 };
 
 /* Gyroscope full scale ranges in degrees per second */
-enum gyro_full_scale_range_t
+enum class MPU6050_Gyro_FS_t
 {
-  GYRO_SCALE_250 = 0,
-  GYRO_SCALE_500 = 1,
-  GYRO_SCALE_1000 = 2,
-  GYRO_SCALE_2000 = 3
+  FS_250_DPS = 0,
+  FS_500_DPS = 1,
+  FS_1000_DPS = 2,
+  FS_2000_DPS = 3
 };
 
 /* Accelerometer full scale ranges in G's */
-enum accel_full_scale_range_t
+enum class MPU6050_Accel_FS_t
 {
-  ACCEL_SCALE_2G = 0,
-  ACCEL_SCALE_4G = 1,
-  ACCEL_SCALE_8G = 2,
-  ACCEL_SCALE_16G = 3
+  FS_2G = 0,
+  FS_4G = 1,
+  FS_8G = 2,
+  FS_16G = 3
 };
 
 /* Digital low pass filter config bandwidth values in Hz*/
-enum dlpf_config_t 
+enum class MPU6050_DLPF_t 
 {
-  DLPF_BW_260Hz = 0,
-  DLPF_BW_184Hz = 1,
-  DLPF_BW_94Hz = 2,
-  DLPF_BW_44Hz = 3,
-  DLPF_BW_21Hz = 4,
-  DLPF_BW_10Hz = 5,
-  DLPF_BW_5Hz = 6,
-  DLPF_RESERVED = 7
+  BW_260Hz = 0,
+  BW_184Hz = 1,
+  BW_94Hz = 2,
+  BW_44Hz = 3,
+  BW_21Hz = 4,
+  BW_10Hz = 5,
+  BW_5Hz = 6,
+  RESERVED = 7
 };
 
 class MPU6050 
@@ -132,8 +132,8 @@ public:
   * @retval i2c_status_t Success rate
   */
   i2c_status_t InitializeSensor(
-      gyro_full_scale_range_t gyroScale = GYRO_SCALE_250,
-      accel_full_scale_range_t accelScale = ACCEL_SCALE_2G);
+      MPU6050_Gyro_FS_t gyroScale = MPU6050_Gyro_FS_t::FS_250_DPS,
+      MPU6050_Accel_FS_t accelScale = MPU6050_Accel_FS_t::FS_2G);
 
   /**
   * @brief  This method wakes the sensor up by cleraing the REG_PWR_MGMT_1
@@ -158,7 +158,7 @@ public:
   * @param  gyroScale Gyroscope scale value to be set
   * @retval i2c_status_t
   */
-  i2c_status_t SetGyroFullScale(gyro_full_scale_range_t gyroScale);
+  i2c_status_t SetGyroFullScale(MPU6050_Gyro_FS_t gyroScale);
 
   /**
   * @brief  This method used for getting the gyroscope full scale range.
@@ -167,7 +167,7 @@ public:
   * @param  error Result of the sensor reading process
   * @retval gyro_full_scale_range_t
   */
-  gyro_full_scale_range_t GetGyroFullScale(i2c_status_t* error);
+  MPU6050_Gyro_FS_t GetGyroFullScale(i2c_status_t* error);
 
   /**
   * @brief  This method used for getting the latest gyroscope X axis RAW value from
@@ -202,7 +202,7 @@ public:
   * @param  accelScale Accelerometer scale value to be set
   * @retval i2c_status_t
   */
-  i2c_status_t SetAccelFullScale(accel_full_scale_range_t accelScale);
+  i2c_status_t SetAccelFullScale(MPU6050_Accel_FS_t accelScale);
 
   /**
   * @brief  This method used for getting the acceleromteter full scale range.
@@ -211,7 +211,7 @@ public:
   * @param  error Result of the sensor reading process
   * @retval accel_full_scale_range_t
   */
-  accel_full_scale_range_t GetAccelFullScale(i2c_status_t* error);
+  MPU6050_Accel_FS_t GetAccelFullScale(i2c_status_t* error);
 
   /**
   * @brief  This method used for getting the latest accelerometer X axis RAW value from
@@ -309,7 +309,7 @@ public:
   * @param gyroRange Configured gyro full scale range
   * @retval float
   */
-  float GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange);
+  float GetGyro_DPS_Constant(MPU6050_Gyro_FS_t gyroRange);
 
   /**
   * @brief  This method used for setting the accelerometer X axis offset value. Offset is
@@ -372,7 +372,7 @@ public:
   * @param accelRange Configured accelerometer full scale range
   * @retval float
   */
-  float GetAccel_MG_Constant(accel_full_scale_range_t accelRange);
+  float GetAccel_MG_Constant(MPU6050_Accel_FS_t accelRange);
 
   /**
   * @brief This function sets the gyroscope sample rate divider. Once the sample rate divider set, actual sample rate
@@ -403,14 +403,14 @@ public:
   * @param dlpfConfig Digital low pass filter configuration value
   * @retval i2c_status_t
   */
-  i2c_status_t SetSensor_DLPF_Config(dlpf_config_t dlpfConfig);
+  i2c_status_t SetSensor_DLPF_Config(MPU6050_DLPF_t dlpfConfig);
 
   /**
   * @brief This function gets the current sensor digital low pass filter configuration.
   * @param error Result of the operation
   * @retval dlpf_config_t
   */
-  dlpf_config_t GetSensor_DLPF_Config(i2c_status_t* error);
+  MPU6050_DLPF_t GetSensor_DLPF_Config(i2c_status_t* error);
 
   /**
   * @brief This function gets the current sensor sample rate. In order to do this, method

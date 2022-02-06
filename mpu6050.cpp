@@ -33,8 +33,8 @@ MPU6050::MPU6050(I2C_Interface *comInterface)
   * @retval i2c_status_t Success rate
   */
 i2c_status_t MPU6050::InitializeSensor(
-    gyro_full_scale_range_t gyroScale,
-    accel_full_scale_range_t accelScale)
+    MPU6050_Gyro_FS_t gyroScale,
+    MPU6050_Accel_FS_t accelScale)
 {
   i2c_status_t result = WakeUpSensor();
   if(result == I2C_STATUS_SUCCESS)
@@ -77,7 +77,7 @@ i2c_status_t MPU6050::ResetSensor(void)
   * @param  gyroScale Gyroscope scale value to be set
   * @retval i2c_status_t
   */
-i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
+i2c_status_t MPU6050::SetGyroFullScale(MPU6050_Gyro_FS_t gyroScale)
 {
   return i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_CONFIG, ((uint8_t)gyroScale << 3));
 }
@@ -89,10 +89,10 @@ i2c_status_t MPU6050::SetGyroFullScale(gyro_full_scale_range_t gyroScale)
   * @param  error Result of the sensor reading process
   * @retval gyro_full_scale_range_t
   */
-gyro_full_scale_range_t MPU6050::GetGyroFullScale(i2c_status_t *error)
+MPU6050_Gyro_FS_t MPU6050::GetGyroFullScale(i2c_status_t *error)
 {
   uint8_t gyroConfig = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::GYRO_CONFIG, error);
-  return (gyro_full_scale_range_t)((gyroConfig >> 3) & 0x03);
+  return (MPU6050_Gyro_FS_t)((gyroConfig >> 3) & 0x03);
 }
 
 /**
@@ -158,7 +158,7 @@ int16_t MPU6050::GetGyro_Z_Raw(i2c_status_t *error)
   * @param  accelScale Accelerometer scale value to be set
   * @retval i2c_status_t
   */
-i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
+i2c_status_t MPU6050::SetAccelFullScale(MPU6050_Accel_FS_t accelScale)
 {
   return i2c->WriteRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_CONFIG, ((uint8_t)accelScale << 3));
 }
@@ -170,10 +170,10 @@ i2c_status_t MPU6050::SetAccelFullScale(accel_full_scale_range_t accelScale)
   * @param  error Result of the sensor reading process
   * @retval accel_full_scale_range_t
   */
-accel_full_scale_range_t MPU6050::GetAccelFullScale(i2c_status_t *error)
+MPU6050_Accel_FS_t MPU6050::GetAccelFullScale(i2c_status_t *error)
 {
   uint8_t accelConfig = i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::ACCEL_CONFIG, error);
-  return (accel_full_scale_range_t)((accelConfig >> 3) & 0x03);  
+  return (MPU6050_Accel_FS_t)((accelConfig >> 3) & 0x03);  
 }
 
 /**
@@ -365,13 +365,13 @@ int16_t MPU6050::GetGyro_Z_Offset(i2c_status_t *error)
 i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY, int16_t targetZ)
 {
   i2c_status_t result = I2C_STATUS_NONE;
-  gyro_full_scale_range_t gyroRange = GetGyroFullScale(&result);
+  MPU6050_Gyro_FS_t gyroRange = GetGyroFullScale(&result);
   if(result != I2C_STATUS_SUCCESS)
     return result;
 
   /* DPS constant to convert raw register value to the 
    * degree per seconds (angular velocity). */
-  const float dpsConstant = dpsConstantArr[gyroRange];
+  const float dpsConstant = dpsConstantArr[static_cast<uint8_t>(gyroRange)];
   float sumOfSamples = 0;
   int16_t offsetVal = 0;
 
@@ -438,9 +438,9 @@ i2c_status_t MPU6050::Calibrate_Gyro_Registers(int16_t targetX, int16_t targetY,
   * @param gyroRange Configured gyro full scale range
   * @retval float
   */
-float MPU6050::GetGyro_DPS_Constant(gyro_full_scale_range_t gyroRange)
+float MPU6050::GetGyro_DPS_Constant(MPU6050_Gyro_FS_t gyroRange)
 {
-  return dpsConstantArr[gyroRange];
+  return dpsConstantArr[static_cast<uint8_t>(gyroRange)];
 }
 
 /**
@@ -555,13 +555,13 @@ int16_t MPU6050::GetAccel_Z_Offset(i2c_status_t *error)
 i2c_status_t MPU6050::Calibrate_Accel_Registers(float targetX_MG, float targetY_MG, float targetZ_MG)
 {
   i2c_status_t result = I2C_STATUS_NONE;
-  accel_full_scale_range_t accelRange = GetAccelFullScale(&result);
+  MPU6050_Accel_FS_t accelRange = GetAccelFullScale(&result);
   if(result != I2C_STATUS_SUCCESS)
     return result;
 
   /* MG constant to convert raw register value to the 
    * gravity (9.81 m/s2). */
-  const float mgConstant = mgCostantArr[accelRange];
+  const float mgConstant = mgCostantArr[static_cast<uint8_t>(accelRange)];
 
   /* Some constants for our calibration routine to modify easily when needed. */
   const int16_t calibrationRangeHigh = 4096;
@@ -801,9 +801,9 @@ i2c_status_t MPU6050::Calibrate_Accel_Registers(float targetX_MG, float targetY_
   * @param accelRange Configured accelerometer full scale range
   * @retval float
   */
-float MPU6050::GetAccel_MG_Constant(accel_full_scale_range_t accelRange)
+float MPU6050::GetAccel_MG_Constant(MPU6050_Accel_FS_t accelRange)
 {
-  return mgCostantArr[accelRange];
+  return mgCostantArr[static_cast<uint8_t>(accelRange)];
 }
 
 /**
@@ -841,7 +841,7 @@ uint8_t MPU6050::GetGyro_SampleRateDivider(i2c_status_t *error)
   * @param dlpfConfig Digital low pass filter configuration value
   * @retval i2c_status_t
   */
-i2c_status_t MPU6050::SetSensor_DLPF_Config(dlpf_config_t dlpfConfig)
+i2c_status_t MPU6050::SetSensor_DLPF_Config(MPU6050_DLPF_t dlpfConfig)
 {
   i2c_status_t error = I2C_STATUS_NONE;
   /* This register also have EXT_SYNC config, so only set the DLPF part! */
@@ -859,10 +859,10 @@ i2c_status_t MPU6050::SetSensor_DLPF_Config(dlpf_config_t dlpfConfig)
   * @param error Result of the operation
   * @retval dlpf_config_t
   */
-dlpf_config_t MPU6050::GetSensor_DLPF_Config(i2c_status_t *error)
+MPU6050_DLPF_t MPU6050::GetSensor_DLPF_Config(i2c_status_t *error)
 {
   /* get only the first 3 bit of the register */
-  return (dlpf_config_t) (i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::CONFIG, error) & 0x07);
+  return (MPU6050_DLPF_t) (i2c->ReadRegister(MPU6050_ADDRESS, MPU6050_Regs::CONFIG, error) & 0x07);
 }
 
 /**
@@ -877,11 +877,11 @@ float MPU6050::GetSensor_CurrentSampleRate_Hz(i2c_status_t *error)
   if(*error != I2C_STATUS_SUCCESS)
     return 0x00;
 
-  dlpf_config_t dlpfConfig = GetSensor_DLPF_Config(error);
+  const uint8_t dlpfConfig = static_cast<uint8_t>(GetSensor_DLPF_Config(error));
   if(*error != I2C_STATUS_SUCCESS)
     return 0x00;
   
   /* if dlpf config is disabled (0 or 7) then sample rate is 8 kHz otherwise 1 kHz */
-  const float gyroDefaultOutRateHz = (dlpfConfig == DLPF_BW_260Hz || dlpfConfig == DLPF_RESERVED) ? 8000 : 1000;
+  const float gyroDefaultOutRateHz = (dlpfConfig == static_cast<uint8_t>(MPU6050_DLPF_t::BW_260Hz) || dlpfConfig == static_cast<uint8_t>(MPU6050_DLPF_t::RESERVED)) ? 8000 : 1000;
   return gyroDefaultOutRateHz / (1 + sampleRateDivider);
 }

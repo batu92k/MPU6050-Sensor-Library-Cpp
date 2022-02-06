@@ -35,7 +35,7 @@ int main()
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   
   /* Wakeup sensor and set full scale ranges */
-  if(sensor.InitializeSensor(GYRO_SCALE_1000, ACCEL_SCALE_8G) != I2C_STATUS_SUCCESS)
+  if(sensor.InitializeSensor(MPU6050_Gyro_FS_t::FS_1000_DPS, MPU6050_Accel_FS_t::FS_8G) != I2C_STATUS_SUCCESS)
   {
     std::cout << "Sensor initialization failed!\n";
     return EXIT_FAILURE;
@@ -58,7 +58,7 @@ int main()
 
   /* set digital low pass to default value 
    * (just to show the feature it already has default value in startup) */
-  if(sensor.SetSensor_DLPF_Config(DLPF_BW_260Hz) != I2C_STATUS_SUCCESS) {
+  if(sensor.SetSensor_DLPF_Config(MPU6050_DLPF_t::BW_260Hz) != I2C_STATUS_SUCCESS) {
     std::cout << "DLPF configuration failed!\n";
     return EXIT_FAILURE;
   }
