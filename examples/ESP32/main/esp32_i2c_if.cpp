@@ -22,7 +22,7 @@
     conf.scl_io_num = 22;
     conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
     conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.master.clk_speed = clock;
+    conf.master.clk_speed = static_cast<uint32_t>(clock);
     conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
 
     i2c_param_config(I2C_Master_Port, &conf);

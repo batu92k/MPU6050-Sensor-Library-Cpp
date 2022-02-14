@@ -29,7 +29,7 @@ i2c_status_t BCM2835_I2C_IF::Init_I2C(i2c_clockspeed_t clock)
         return I2C_STATUS_ERROR;
     }
     
-    bcm2835_i2c_set_baudrate(clock);
+    bcm2835_i2c_set_baudrate(static_cast<uint32_t>(clock));
     bcm2835_gpio_set_pud(RPI_GPIO_P1_03, BCM2835_GPIO_PUD_UP);
     bcm2835_gpio_set_pud(RPI_GPIO_P1_05, BCM2835_GPIO_PUD_UP);
     return I2C_STATUS_SUCCESS;

@@ -21,12 +21,12 @@ enum i2c_status_t
 };
 
 /* I2C clock speed types */
-enum i2c_clockspeed_t
+enum class i2c_clockspeed_t
 {
-  I2C_CLOCK_NONE = 0,
-  I2C_CLOCK_100KHz = 100000,
-  I2C_CLOCK_200KHz = 200000,
-  I2C_CLOCK_400KHz = 400000
+  CLK_NONE = 0,
+  CLK_100KHz = 100000,
+  CLK_200KHz = 200000,
+  CLK_400KHz = 400000
 };
 
 /* I2C Interface class to make sensor driver work with
@@ -56,7 +56,7 @@ public:
   * @param  clock I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  virtual i2c_status_t Init_I2C(i2c_clockspeed_t clock = I2C_CLOCK_100KHz) {return I2C_STATUS_NONE;};
+  virtual i2c_status_t Init_I2C(i2c_clockspeed_t clock = i2c_clockspeed_t::CLK_100KHz) {return I2C_STATUS_NONE;};
 
   /**
   * @brief  I2C peripheral initialization method.

@@ -21,7 +21,7 @@ public:
   * @param  clock I2C clock frequency (default 100 kHz)
   * @retval i2c_status_t
   */
-  i2c_status_t Init_I2C(i2c_clockspeed_t clock = I2C_CLOCK_100KHz) override;
+  i2c_status_t Init_I2C(i2c_clockspeed_t clock = i2c_clockspeed_t::CLK_100KHz) override;
 
   /**
   * @brief  This method will be used for reading the data of the given register from
