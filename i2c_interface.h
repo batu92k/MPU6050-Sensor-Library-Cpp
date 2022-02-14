@@ -12,7 +12,7 @@
 #define I2C_INTERFACE_H
 
 /* I2C status types. 
- * TODO: will be extended for different I2C error types! */
+ * TODO: will be extended for different I2C error types! Keep it as enum for now. */
 enum i2c_status_t 
 {
   I2C_STATUS_SUCCESS = 0x00,
