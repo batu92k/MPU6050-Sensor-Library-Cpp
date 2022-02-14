@@ -13,7 +13,6 @@
 #include "mpu6050.h"
 #include "bcm2835_i2c_if.h"
 
-
 int main() 
 {
   I2C_Interface* i2c_if = new BCM2835_I2C_IF();
@@ -25,7 +24,7 @@ int main()
     return EXIT_FAILURE;
   }
 
-  MPU6050 sensor(i2c_if);
+  MPU6050_Driver::MPU6050 sensor(i2c_if);
   if(sensor.ResetSensor() != I2C_STATUS_SUCCESS)
   {
     std::cout << "Sensor reset failed!\n";
@@ -35,7 +34,7 @@ int main()
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   
   /* Wakeup sensor and set full scale ranges */
-  if(sensor.InitializeSensor(MPU6050_Gyro_FS_t::FS_1000_DPS, MPU6050_Accel_FS_t::FS_8G) != I2C_STATUS_SUCCESS)
+  if(sensor.InitializeSensor(MPU6050_Driver::Gyro_FS_t::FS_1000_DPS, MPU6050_Driver::Accel_FS_t::FS_8G) != I2C_STATUS_SUCCESS)
   {
     std::cout << "Sensor initialization failed!\n";
     return EXIT_FAILURE;
@@ -58,7 +57,7 @@ int main()
 
   /* set digital low pass to default value 
    * (just to show the feature it already has default value in startup) */
-  if(sensor.SetSensor_DLPF_Config(MPU6050_DLPF_t::BW_260Hz) != I2C_STATUS_SUCCESS) {
+  if(sensor.SetSensor_DLPF_Config(MPU6050_Driver::DLPF_t::BW_260Hz) != I2C_STATUS_SUCCESS) {
     std::cout << "DLPF configuration failed!\n";
     return EXIT_FAILURE;
   }
