@@ -90,22 +90,22 @@ public:
   * from the slace device with the given address.
   * @param  slaveAddress Slave chip I2C bus address
   * @param  regAddress Register address that the data to be read
-  * @param  bitNo Bit number to be read
+  * @param  bitMask Bit mask to be read
   * @param  status Pointer for operation status
   * @retval bool Bit value
   */
-  bool ReadRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, i2c_status_t *status);
+  bool ReadRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitMask, i2c_status_t *status);
 
   /**
   * @brief  This method will be used for writing a bit value of the given register
   * from the slace device with the given address.
   * @param  slaveAddress Slave chip I2C bus address
   * @param  regAddress Register address that the data to be written
-  * @param  bitNo Bit number to be set/reset
+  * @param  bitMask Bit mask to be set/reset
   * @param  bitVal Bit value to be written
   * @retval i2c_status_t
   */
-  i2c_status_t WriteRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitNo, bool bitVal);
+  i2c_status_t WriteRegisterBit(uint8_t slaveAddress, uint8_t regAddress, uint8_t bitMask, bool bitVal);
 };
 
 #endif /* include guard */

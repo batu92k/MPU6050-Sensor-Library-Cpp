@@ -29,7 +29,16 @@ namespace MPU6050_Driver {
   #endif
 
   /* define sensor register type here to write it easily */
-  #define SensorConst static constexpr uint8_t 
+  #define SensorConst static constexpr uint8_t
+  /* bit masks */
+  #define BIT_0 (1 << 0)
+  #define BIT_1 (1 << 1)
+  #define BIT_2 (1 << 2)
+  #define BIT_3 (1 << 3)
+  #define BIT_4 (1 << 4)
+  #define BIT_5 (1 << 5)
+  #define BIT_6 (1 << 6)
+  #define BIT_7 (1 << 7)
 
   namespace Sensor_Regs {
     SensorConst USER_CTRL = 0x6A;
@@ -79,14 +88,29 @@ namespace MPU6050_Driver {
     SensorConst CONFIG = 0x1A;    // digital low passand extra sync configutation
   };
 
+  namespace Regbits_USER_CTRL {
+    SensorConst BIT_SIG_CONF_RESET = BIT_0;
+    SensorConst BIT_I2C_MST_RESET = BIT_1;
+    SensorConst BIT_FIFO_RESET = BIT_2;
+    SensorConst BIT_I2C_IF_DIS = BIT_4;
+    SensorConst BIT_I2C_MST_EN = BIT_5;
+    SensorConst BIT_FIFO_EN = BIT_6;
+  }
+
+  namespace Regbits_INT_ENABLE {
+    SensorConst BIT_DATA_RDY_EN = BIT_0;
+    SensorConst BIT_I2C_MST_INT_EN = BIT_3;
+    SensorConst BIT_FIFO_OFLOW_EN = BIT_4;
+  }
+
   namespace Regbits_PWR_MGMT_1 {
-    SensorConst BIT_CLKSEL_0 = 0;
-    SensorConst BIT_CLKSEL_1 = 1;
-    SensorConst BIT_CLKSEL_2 = 2;
-    SensorConst BIT_TEMP_DIS = 3;
-    SensorConst BIT_CYCLE = 5;
-    SensorConst BIT_SLEEP = 6;
-    SensorConst BIT_DEVICE_RESET = 7;
+    SensorConst BIT_CLKSEL_0 = BIT_0;
+    SensorConst BIT_CLKSEL_1 = BIT_1;
+    SensorConst BIT_CLKSEL_2 = BIT_2;
+    SensorConst BIT_TEMP_DIS = BIT_3;
+    SensorConst BIT_CYCLE = BIT_5;
+    SensorConst BIT_SLEEP = BIT_6;
+    SensorConst BIT_DEVICE_RESET = BIT_7;
   };
 
   /* Gyroscope full scale ranges in degrees per second */
