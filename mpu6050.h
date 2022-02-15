@@ -113,6 +113,17 @@ namespace MPU6050_Driver {
     SensorConst BIT_DEVICE_RESET = BIT_7;
   };
 
+  namespace Regbits_FIFO_EN {
+    SensorConst BIT_SLV0_FIFO_EN = BIT_0;
+    SensorConst BIT_SLV1_FIFO_EN = BIT_1;
+    SensorConst BIT_SLV2_FIFO_EN = BIT_2;
+    SensorConst BIT_ACCEL_FIFO_EN = BIT_3;
+    SensorConst BIT_ZG_FIFO_EN = BIT_4;
+    SensorConst BIT_YG_FIFO_EN = BIT_5;
+    SensorConst BIT_XG_FIFO_EN = BIT_6;
+    SensorConst BIT_TEMP_FIFO_EN = BIT_7;
+  };
+
   /* Gyroscope full scale ranges in degrees per second */
   enum class Gyro_FS_t
   {
@@ -473,6 +484,21 @@ namespace MPU6050_Driver {
     * @retval i2c_status_t
     */
     i2c_status_t SetSensor_InterruptEnable(uint8_t enabledInterrupts);
+
+    /**
+    * @brief This function gets the sensor FIFO configuration. Use Regbits_FIFO_EN as bitmask to check which
+    *        samples enabled in the FIFO reading.
+    * @param error Result of the operation
+    * @retval uint8_t Sensor fifo configuration value, use Regbits_FIFO_EN to check fifo config.
+    */
+    uint8_t GetSensor_FIFO_Config(i2c_status_t* error);
+
+    /**
+    * @brief This function sets the sensor FIFO configuration.
+    * @param fifoConfigVal FIFO config value, use Regbits_FIFO_EN as bitmask to configure.
+    * @retval i2c_status_t
+    */
+    i2c_status_t SetSensor_FIFO_Config(uint8_t fifoConfigVal);
 
   private:
     I2C_Interface* i2c = nullptr;

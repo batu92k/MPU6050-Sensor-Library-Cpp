@@ -924,4 +924,25 @@ namespace MPU6050_Driver {
       return i2c->WriteRegister(MPU6050_ADDRESS, Sensor_Regs::INT_ENABLE, enabledInterrupts);
     }
 
+    /**
+    * @brief This function gets the sensor FIFO configuration. Use Regbits_FIFO_EN as bitmask to check which
+    *        samples enabled in the FIFO reading.
+    * @param error Result of the operation
+    * @retval uint8_t Sensor fifo configuration value, use Regbits_FIFO_EN to check fifo config.
+    */
+    uint8_t MPU6050::GetSensor_FIFO_Config(i2c_status_t* error)
+    {
+      return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_EN, error);
+    }
+
+    /**
+    * @brief This function sets the sensor FIFO configuration.
+    * @param fifoConfigVal FIFO config value, use Regbits_FIFO_EN as bitmask to configure.
+    * @retval i2c_status_t
+    */
+    i2c_status_t MPU6050::SetSensor_FIFO_Config(uint8_t fifoConfigVal)
+    {
+      return i2c->WriteRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_EN, fifoConfigVal);
+    }
+
 } // namespace MPU6050_Driver
