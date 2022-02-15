@@ -460,6 +460,20 @@ namespace MPU6050_Driver {
     */
     uint16_t GetSensor_FIFOCount(i2c_status_t* error);
 
+    /**
+    * @brief This function gets the INT_ENABLE register value.
+    * @param error Result of the operation
+    * @retval uint8_t Enabled/Disabled sensor interrupts. Use Regbits_INT_ENABLE namespace as bitmask to check enabled interrupts.
+    */
+    uint8_t GetSensor_InterruptEnable(i2c_status_t* error);
+
+    /**
+    * @brief This function sets the sensor INT_ENABLE register with given value.
+    * @param enabledInterrupts Enabled/Disabled sensor interrupts. Use Regbits_INT_ENABLE namespace.
+    * @retval i2c_status_t
+    */
+    i2c_status_t SetSensor_InterruptEnable(uint8_t enabledInterrupts);
+
   private:
     I2C_Interface* i2c = nullptr;
     /* DPS constant to convert raw register value to the degree per seconds (angular velocity).

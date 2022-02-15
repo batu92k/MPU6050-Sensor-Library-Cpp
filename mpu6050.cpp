@@ -904,4 +904,24 @@ namespace MPU6050_Driver {
       return 0x00;
     }
 
+    /**
+    * @brief This function gets the INT_ENABLE register value.
+    * @param error Result of the operation
+    * @retval uint8_t Enabled/Disabled sensor interrupts. Use Regbits_INT_ENABLE namespace as bitmask to check enabled interrupts.
+    */
+    uint8_t MPU6050::GetSensor_InterruptEnable(i2c_status_t* error)
+    {
+      return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::INT_ENABLE, error);
+    }
+
+    /**
+    * @brief This function sets the sensor INT_ENABLE register with given value.
+    * @param enabledInterrupts Enabled/Disabled sensor interrupts. Use Regbits_INT_ENABLE namespace.
+    * @retval i2c_status_t
+    */
+    i2c_status_t MPU6050::SetSensor_InterruptEnable(uint8_t enabledInterrupts)
+    {
+      return i2c->WriteRegister(MPU6050_ADDRESS, Sensor_Regs::INT_ENABLE, enabledInterrupts);
+    }
+
 } // namespace MPU6050_Driver
