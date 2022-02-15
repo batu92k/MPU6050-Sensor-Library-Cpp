@@ -32,9 +32,17 @@ namespace MPU6050_Driver {
   #define SensorConst static constexpr uint8_t 
 
   namespace Sensor_Regs {
+    SensorConst USER_CTRL = 0x6A;
     SensorConst PWR_MGMT_1 = 0x6B;
     SensorConst GYRO_CONFIG = 0x1B;
     SensorConst ACCEL_CONFIG = 0x1C;
+    SensorConst INT_ENABLE = 0x38;
+
+    /* FIFO registers */
+    SensorConst FIFO_EN = 0x23;
+    SensorConst FIFO_COUNT_L = 0x73;
+    SensorConst FIFO_COUNT_H = 0x72;
+
     /* Accelerometer read registers */
     SensorConst ACCEL_X_OUT_L = 0x3C;
     SensorConst ACCEL_X_OUT_H = 0x3B;
@@ -420,6 +428,13 @@ namespace MPU6050_Driver {
     * @retval float Current sample rate in Hz
     */
     float GetSensor_CurrentSampleRate_Hz (i2c_status_t* error);
+
+    /**
+    * @brief This function gets the number of bytes written in the sensor FIFO buffers.
+    * @param error Result of the operation
+    * @retval uint16_t Number of samples in the FIFO buffer in bytes
+    */
+    uint16_t GetSensor_FIFOCount(i2c_status_t* error);
 
   private:
     I2C_Interface* i2c = nullptr;

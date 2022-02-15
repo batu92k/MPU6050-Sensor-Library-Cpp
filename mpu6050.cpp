@@ -887,4 +887,21 @@ namespace MPU6050_Driver {
     return gyroDefaultOutRateHz / (1 + sampleRateDivider);
   }
 
+    /**
+    * @brief This function gets the number of bytes written in the sensor FIFO buffers.
+    * @param error Result of the operation
+    * @retval uint16_t Number of samples in the FIFO buffer in bytes
+    */
+    uint16_t MPU6050::GetSensor_FIFOCount(i2c_status_t* error)
+    {
+      uint16_t fifoCount = i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_COUNT_H, error); // higher 8 bits
+      if(*error == I2C_STATUS_SUCCESS)
+      {
+        fifoCount = (fifoCount << 8) |  i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_COUNT_L, error); // assemble higher and lower bytes
+        return fifoCount;
+      }
+
+      return 0x00;
+    }
+
 } // namespace MPU6050_Driver
