@@ -14,7 +14,7 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 
-#include "../../../mpu6050.h"
+#include "../../../../mpu6050.h"
 #include "esp32_i2c_if.h"
 
 extern "C" void app_main(void)

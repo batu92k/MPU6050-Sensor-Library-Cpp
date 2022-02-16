@@ -3,4 +3,4 @@
 cmake_minimum_required(VERSION 3.5)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(esp32-mpu6050)
+project(esp32-mpu6050-basic-sensor-read)
