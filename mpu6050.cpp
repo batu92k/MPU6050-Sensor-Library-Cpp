@@ -945,4 +945,34 @@ namespace MPU6050_Driver {
       return i2c->WriteRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_EN, fifoConfigVal);
     }
 
+    /**
+    * @brief This function gets the sensor FIFO enable bit in USER_CTRL register.
+    * @param error Result of the operation
+    * @retval bool True if FIFO enabled
+    */
+    bool MPU6050::GetSensor_FIFO_Enable(i2c_status_t* error)
+    {
+      return i2c->ReadRegisterBit(MPU6050_ADDRESS, Sensor_Regs::USER_CTRL, Regbits_USER_CTRL::BIT_FIFO_EN, error);
+    }
+
+    /**
+    * @brief This function sets the sensor FIFO enable bit in USER_CTRL register.
+    * @param state State of the FIFO to be set. True if it will be enabled.
+    * @retval i2c_status_t
+    */
+    i2c_status_t MPU6050::SetSensor_FIFO_Enable(bool state)
+    {
+      return i2c->WriteRegisterBit(MPU6050_ADDRESS, Sensor_Regs::USER_CTRL, Regbits_USER_CTRL::BIT_FIFO_EN, state);
+    }
+
+    /**
+    * @brief This function resets the sensor FIFO.
+    * @param none
+    * @retval i2c_status_t
+    */
+    i2c_status_t MPU6050::Reset_Sensor_FIFO(void)
+    {
+      return i2c->WriteRegisterBit(MPU6050_ADDRESS, Sensor_Regs::USER_CTRL, Regbits_USER_CTRL::BIT_FIFO_RESET, true);
+    }
+
 } // namespace MPU6050_Driver

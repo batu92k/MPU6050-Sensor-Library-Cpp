@@ -500,6 +500,27 @@ namespace MPU6050_Driver {
     */
     i2c_status_t SetSensor_FIFO_Config(uint8_t fifoConfigVal);
 
+    /**
+    * @brief This function gets the sensor FIFO enable bit in USER_CTRL register.
+    * @param error Result of the operation
+    * @retval bool True if FIFO enabled
+    */
+    bool GetSensor_FIFO_Enable(i2c_status_t* error);
+
+    /**
+    * @brief This function sets the sensor FIFO enable bit in USER_CTRL register.
+    * @param state State of the FIFO to be set. True if it will be enabled.
+    * @retval i2c_status_t
+    */
+    i2c_status_t SetSensor_FIFO_Enable(bool state);
+
+    /**
+    * @brief This function resets the sensor FIFO.
+    * @param none
+    * @retval i2c_status_t
+    */
+    i2c_status_t Reset_Sensor_FIFO(void);
+
   private:
     I2C_Interface* i2c = nullptr;
     /* DPS constant to convert raw register value to the degree per seconds (angular velocity).
