@@ -985,4 +985,14 @@ namespace MPU6050_Driver {
       return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::INT_STATUS, error);
     }
 
+    /**
+    * @brief This function reads 1 byte from sensor FIFO data register.
+    * @param error Result of the operation.
+    * @retval uint8_t FIFO data.
+    */
+    uint8_t MPU6050::GetSensor_FIFO_Data(i2c_status_t* error)
+    {
+      return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_R_W, error);
+    }
+
 } // namespace MPU6050_Driver

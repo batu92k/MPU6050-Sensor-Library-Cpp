@@ -52,6 +52,7 @@ namespace MPU6050_Driver {
     SensorConst FIFO_EN = 0x23;
     SensorConst FIFO_COUNT_L = 0x73;
     SensorConst FIFO_COUNT_H = 0x72;
+    SensorConst FIFO_R_W = 0x74;
 
     /* Accelerometer read registers */
     SensorConst ACCEL_X_OUT_L = 0x3C;
@@ -528,6 +529,13 @@ namespace MPU6050_Driver {
     * @retval uint8_t Register value.
     */
     uint8_t GetSensor_InterruptStatus(i2c_status_t* error);
+
+    /**
+    * @brief This function reads 1 byte from sensor FIFO data register.
+    * @param error Result of the operation.
+    * @retval uint8_t FIFO data.
+    */
+    uint8_t GetSensor_FIFO_Data(i2c_status_t* error);
 
   private:
     I2C_Interface* i2c = nullptr;
