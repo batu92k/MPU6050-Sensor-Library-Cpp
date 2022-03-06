@@ -975,4 +975,14 @@ namespace MPU6050_Driver {
       return i2c->WriteRegisterBit(MPU6050_ADDRESS, Sensor_Regs::USER_CTRL, Regbits_USER_CTRL::BIT_FIFO_RESET, true);
     }
 
+    /**
+    * @brief This function gets the sensor interrput status (INT_STATUS) register.
+    * @param error Result of the operation
+    * @retval uint8_t Register value.
+    */
+    uint8_t MPU6050::GetSensor_InterruptStatus(i2c_status_t* error)
+    {
+      return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::INT_STATUS, error);
+    }
+
 } // namespace MPU6050_Driver

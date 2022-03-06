@@ -46,6 +46,7 @@ namespace MPU6050_Driver {
     SensorConst GYRO_CONFIG = 0x1B;
     SensorConst ACCEL_CONFIG = 0x1C;
     SensorConst INT_ENABLE = 0x38;
+    SensorConst INT_STATUS = 0x3A;
 
     /* FIFO registers */
     SensorConst FIFO_EN = 0x23;
@@ -520,6 +521,13 @@ namespace MPU6050_Driver {
     * @retval i2c_status_t
     */
     i2c_status_t Reset_Sensor_FIFO(void);
+
+    /**
+    * @brief This function gets the sensor interrput status (INT_STATUS) register.
+    * @param error Result of the operation
+    * @retval uint8_t Register value.
+    */
+    uint8_t GetSensor_InterruptStatus(i2c_status_t* error);
 
   private:
     I2C_Interface* i2c = nullptr;
