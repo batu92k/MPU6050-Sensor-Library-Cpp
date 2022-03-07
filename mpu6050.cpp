@@ -995,4 +995,24 @@ namespace MPU6050_Driver {
       return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::FIFO_R_W, error);
     }
 
+   /**
+    * @brief This function returns sensor interrupt pin config register value.
+    * @param error Result of the operation.
+    * @retval uint8_t Interrupt pin config register value.
+    */
+    uint8_t MPU6050::GetSensor_InterruptPinConfig(i2c_status_t* error)
+    {
+      return i2c->ReadRegister(MPU6050_ADDRESS, Sensor_Regs::INT_PIN_CFG, error);
+    }
+
+    /**
+    * @brief This function sets the sensor interrupt pin config register.
+    * @param intPinConfig interrput pin config value to set
+    * @retval i2c_status_t
+    */
+    i2c_status_t MPU6050::SetSensor_InterruptPinConfig(uint8_t intPinConfig)
+    {
+      return i2c->WriteRegister(MPU6050_ADDRESS, Sensor_Regs::INT_PIN_CFG, intPinConfig);
+    }
+
 } // namespace MPU6050_Driver

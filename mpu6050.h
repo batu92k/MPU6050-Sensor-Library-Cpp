@@ -46,6 +46,7 @@ namespace MPU6050_Driver {
     SensorConst GYRO_CONFIG = 0x1B;
     SensorConst ACCEL_CONFIG = 0x1C;
     SensorConst INT_ENABLE = 0x38;
+    SensorConst INT_PIN_CFG = 0x37;
     SensorConst INT_STATUS = 0x3A;
 
     /* FIFO registers */
@@ -125,6 +126,16 @@ namespace MPU6050_Driver {
     SensorConst BIT_XG_FIFO_EN = BIT_6;
     SensorConst BIT_TEMP_FIFO_EN = BIT_7;
   };
+
+  namespace Regbits_INT_PIN_CFG {
+    SensorConst BIT_I2C_BYPASS_EN = BIT_1;
+    SensorConst BIT_FSYNC_INT_EN = BIT_2;
+    SensorConst BIT_FSYNC_INT_LEVEL = BIT_3;
+    SensorConst BIT_INT_RD_CLEAR = BIT_4;
+    SensorConst BIT_LATCH_INT_EN = BIT_5;
+    SensorConst BIT_INT_OPEN = BIT_6;
+    SensorConst BIT_INT_LEVEL = BIT_7;
+  }
 
   /* Gyroscope full scale ranges in degrees per second */
   enum class Gyro_FS_t
@@ -536,6 +547,21 @@ namespace MPU6050_Driver {
     * @retval uint8_t FIFO data.
     */
     uint8_t GetSensor_FIFO_Data(i2c_status_t* error);
+
+    /**
+    * @brief This function returns sensor interrupt pin config register value.
+    * @param error Result of the operation.
+    * @retval uint8_t Interrupt pin config register value.
+    */
+    uint8_t GetSensor_InterruptPinConfig(i2c_status_t* error);
+
+    /**
+    * @brief This function sets the sensor interrupt pin config register.
+    * @param intPinConfig interrput pin config value to set
+    * @retval i2c_status_t
+    */
+    i2c_status_t SetSensor_InterruptPinConfig(uint8_t intPinConfig);
+
 
   private:
     I2C_Interface* i2c = nullptr;
