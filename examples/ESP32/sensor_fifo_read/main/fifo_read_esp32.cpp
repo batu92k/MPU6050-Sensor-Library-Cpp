@@ -95,14 +95,6 @@ extern "C" void app_main(void)
     esp_restart();  
   }
 
-  /* Enable sensor data ready and fifo overflow interrupts. */
-  uint8_t interruptConfigVal = MPU6050_Driver::Regbits_INT_ENABLE::BIT_DATA_RDY_EN |
-  MPU6050_Driver::Regbits_INT_ENABLE::BIT_FIFO_OFLOW_EN;
-  if(sensor.SetSensor_InterruptEnable(interruptConfigVal) != I2C_STATUS_SUCCESS) {
-    printf("Interrput enable failed!\n");
-    esp_restart();
-  }
-
   /* Make sure sensor fifo is disabledbefore reseting the buffer. */
   if(sensor.SetSensor_FIFO_Enable(false) != I2C_STATUS_SUCCESS) {
     printf("Sensor fifo enable failed!\n");
