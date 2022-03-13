@@ -32,6 +32,14 @@ struct SensorFrame {
 static xQueueHandle qSensorReadEvent = NULL;
 static const gpio_num_t EXTI_Pin = GPIO_NUM_18;
 
+/**
+ * @brief Interrupt service routine for external pin interrupt (GPIO_NUM_18). Sensor is
+ * configured to generate raising edge interrupt on every data ready event. Sensor INT pin is
+ * connected to the GPIO_NUM18 pin. Every time we get positive edge interrupt we send sensor
+ * read event message to sensor read task via qSensorReadEvent queue.
+ * @param arg void argpointer to be casted to desired parameter
+ * @retval none
+ */
 extern "C" void IRAM_ATTR gpio_isr_handler(void* arg)
 {
     uint32_t gpio_num = (uint32_t) arg;
@@ -41,6 +49,14 @@ extern "C" void IRAM_ATTR gpio_isr_handler(void* arg)
     }
 }
 
+/**
+ * @brief This methos is a FreeRTOS task method where we initialize and configure the sensor
+ * and wait for the read event from interrupt to read sensor FIFO buffer.
+ * TODO: consider moving sensor configuration into a separate method and call the new method from either here
+ * or in the app main method!
+ * @param arg void pointer to be casted to desired parameter (unused)
+ * @retval none
+ */
 extern "C" void Sensor_Read_Task(void* arg)
 {
   /* create i2c and sensor class instances and configure the sensor */
@@ -159,7 +175,7 @@ extern "C" void Sensor_Read_Task(void* arg)
   uint8_t qData;
   while (error == I2C_STATUS_SUCCESS)
   {
-    /* read sensor fifo on every data ready interrupt */
+    /* read sensor FIFO buffer on every data ready interrupt */
     if (xQueueReceive(qSensorReadEvent, &qData, portMAX_DELAY) == pdPASS)
     {
       intStatus = sensor.GetSensor_InterruptStatus(&error);
