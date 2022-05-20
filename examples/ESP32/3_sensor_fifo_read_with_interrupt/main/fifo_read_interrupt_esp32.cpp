@@ -37,7 +37,7 @@
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
 
-#include "../../../../mpu6050.h"
+#include "mpu6050.h"
 #include "esp32_i2c_if.h"
 
 /* structure to keep latest sensor data */

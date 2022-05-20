@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    fifo_read_esp32.cpp
+  * @file    example_esp32.cpp
   * @author  Ali Batuhan KINDAN
-  * @date    06.03.2022
-  * @brief   Example application for ESP32-Wroom to show MPU6050 fifo reading sequence.
+  * @date    24.01.2022
+  * @brief   Example application for ESP32-Wroom to show MPU6050 driver features.
   *          IDF version used: ESP-IDF v5.0-dev-1295-gfaf0f61cdb
   *
   * MIT License
@@ -35,18 +35,8 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 
-#include "../../../../mpu6050.h"
+#include "mpu6050.h"
 #include "esp32_i2c_if.h"
-
-/* structure to keep latest sensor data */
-struct SensorFrame {
-  int16_t ax;
-  int16_t ay;
-  int16_t az;
-  int16_t gx;
-  int16_t gy;
-  int16_t gz;
-};
 
 extern "C" void app_main(void)
 {
@@ -102,51 +92,21 @@ extern "C" void app_main(void)
     esp_restart();
   }
 
-  /* set digital low pass to BW_184Hz (sample rate reduced to 1KHz)
+  /* set digital low pass to default value 
    * (just to show the feature it already has default value in startup) */
-  if(sensor.SetSensor_DLPF_Config(MPU6050_Driver::DLPF_t::BW_184Hz) != I2C_STATUS_SUCCESS) {
+  if(sensor.SetSensor_DLPF_Config(MPU6050_Driver::DLPF_t::BW_260Hz) != I2C_STATUS_SUCCESS) {
     printf("DLPF configuration failed!\n");
     esp_restart();  
   }
 
-  /* set sample rate divider for 20 Hz sample rate.
-   * 1000 / (1 + 49) = 20 Hz */
-  if(sensor.SetGyro_SampleRateDivider(49) != I2C_STATUS_SUCCESS) {
+  /* set sample rate divider to default value 
+   * (just to show the feature it already has default value in startup) */
+  i2c_status_t error = I2C_STATUS_NONE;
+  if(sensor.SetGyro_SampleRateDivider(0) != I2C_STATUS_SUCCESS) {
     printf("Sample rate config failed!\n");
     esp_restart();  
   }
 
-  /* Make sure sensor fifo is disabledbefore reseting the buffer. */
-  if(sensor.SetSensor_FIFO_Enable(false) != I2C_STATUS_SUCCESS) {
-    printf("Sensor fifo enable failed!\n");
-    esp_restart();
-  }
-
-  /* Reset sensro fifo buffer. */
-  if(sensor.Reset_Sensor_FIFO() != I2C_STATUS_SUCCESS) {
-    printf("Sensor fifo reset failed!\n");
-    esp_restart();
-  }
-
-  /* Enable sensor fifo. */
-  if(sensor.SetSensor_FIFO_Enable(true) != I2C_STATUS_SUCCESS) {
-    printf("Sensor fifo enable failed!\n");
-    esp_restart();
-  }
-
-  /* configure sensor fifo to be able to read accelerometer x, y, z and
-   * groscope x, y ,z values. */
-  uint8_t fifoConfigVal = 
-  MPU6050_Driver::Regbits_FIFO_EN::BIT_ACCEL_FIFO_EN |
-  MPU6050_Driver::Regbits_FIFO_EN::BIT_XG_FIFO_EN |
-  MPU6050_Driver::Regbits_FIFO_EN::BIT_YG_FIFO_EN |
-  MPU6050_Driver::Regbits_FIFO_EN::BIT_ZG_FIFO_EN;
-  if(sensor.SetSensor_FIFO_Config(fifoConfigVal) != I2C_STATUS_SUCCESS) {
-    printf("Sensor fifo congfiguration failed!\n");
-    esp_restart();
-  }
-
-  i2c_status_t error = I2C_STATUS_NONE;
   float currentSampleRateHz = sensor.GetSensor_CurrentSampleRate_Hz(&error);
   if(error != I2C_STATUS_SUCCESS) {
     printf("Sample rate reading failed!\n");
@@ -156,66 +116,26 @@ extern "C" void app_main(void)
   printf("Sensor sample rate: %.2f Hz \n", currentSampleRateHz);
   printf("Sensor configuration completed!\n");
 
-  uint8_t intStatus = 0;
-  uint16_t fifoCount = 0;
-  uint8_t fifoData[12]; // axH, axL, ayH, ayL, azH, azL, gxH, gxL, gyH, gyL, gzH, gzL
-  SensorFrame currentFrame; // structure to keep current frame in constructed int16_t form
-  constexpr uint16_t FIFO_FRAME_LEN = 12;
   /* Read sensor conversion registers for test! */
-  while(error == I2C_STATUS_SUCCESS)
+  uint8_t totalRes = I2C_STATUS_SUCCESS;
+  i2c_status_t currentRes = I2C_STATUS_SUCCESS;
+  while(totalRes == I2C_STATUS_SUCCESS)
   {
-    intStatus = sensor.GetSensor_InterruptStatus(&error);
-
-    if(error != I2C_STATUS_SUCCESS) {
-      printf("Interrupt status read failed!\n");
-      break;
-    }
-
-    /* Check if there is any overflow. If yes then abort! */
-    if(intStatus & MPU6050_Driver::Regbits_INT_ENABLE::BIT_FIFO_OFLOW_EN) {
-      printf("FIFO overflow detected!\n");
-      break;
-    }
-
-    fifoCount = sensor.GetSensor_FIFOCount(&error);
-
-    if(error != I2C_STATUS_SUCCESS) {
-      printf("FIFO count read failed!\n");
-      break;
-    }
-
-    /* If sensor fifo count is smaller than our frame size or if the data ready bit is not set,
-     * do not execute the further sequence where we read and process FIFO data. */
-    if(fifoCount < FIFO_FRAME_LEN || !(intStatus & MPU6050_Driver::Regbits_INT_ENABLE::BIT_DATA_RDY_EN)) {
-      continue;
-    }
-
-    /* Read sensor frame amount of bytes (12 bytes) from FIFO buffer. */
-    for(uint8_t i = 0; i < FIFO_FRAME_LEN && (error == I2C_STATUS_SUCCESS); i++) {
-      fifoData[i] = sensor.GetSensor_FIFO_Data(&error);
-    }
-
-    if(error != I2C_STATUS_SUCCESS) {
-      printf("FIFO data read failed!\n");
-      break;
-    }
-
-    /* Set sensor frame structure values from latest sensor FIFO data. */
-    currentFrame.ax = (int16_t)fifoData[0] << 8 | (int16_t)fifoData[1];
-    currentFrame.ay = (int16_t)fifoData[2] << 8 | (int16_t)fifoData[3];
-    currentFrame.az = (int16_t)fifoData[4] << 8 | (int16_t)fifoData[5];
-    currentFrame.gx = (int16_t)fifoData[6] << 8 | (int16_t)fifoData[7];
-    currentFrame.gy = (int16_t)fifoData[8] << 8 | (int16_t)fifoData[9];
-    currentFrame.gz = (int16_t)fifoData[10] << 8 | (int16_t)fifoData[11];
-
-    /* print the constructed sensor FIFO data! */
-    printf("aX: %d aY: %d aZ: %d gX: %d gY: %d gZ: %d\n",
-    currentFrame.ax,
-    currentFrame.ay,
-    currentFrame.az,
-    currentFrame.gx,
-    currentFrame.gy,
-    currentFrame.gz);
+    printf("Acc_X: %d ", sensor.GetAccel_X_Raw(&currentRes));
+    totalRes |= currentRes;
+    printf("Acc_Y: %d ", sensor.GetAccel_Y_Raw(&currentRes));
+    totalRes |= currentRes;
+    printf("Acc_Z: %d ", sensor.GetAccel_Z_Raw(&currentRes));
+    totalRes |= currentRes;
+    printf("Temp: %.2f ", sensor.GetTemperature_Celcius(&currentRes));
+    totalRes |= currentRes;
+    printf("Gyro_X: %d ", sensor.GetGyro_X_Raw(&currentRes));
+    totalRes |= currentRes;
+    printf("Gyro_Y: %d ", sensor.GetGyro_Y_Raw(&currentRes));
+    totalRes |= currentRes;
+    printf("Gyro_Z: %d \n", sensor.GetGyro_Z_Raw(&currentRes));
+    totalRes |= currentRes;
+    vTaskDelay(50 / portTICK_RATE_MS);
   }
 
   printf("Sensor read error! Program terminated!\n");
